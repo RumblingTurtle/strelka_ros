@@ -50,7 +50,6 @@
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>elevation_mapping</build_depend>
-
   <build_depend>unitree_legged_msgs</build_depend>
   <build_export_depend>elevation_mapping</build_export_depend>
   <exec_depend>elevation_mapping</exec_depend>
