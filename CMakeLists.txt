@@ -49,13 +49,21 @@ include_directories(
 add_executable(a1_transform_publisher src/a1_transform_publisher.cpp)
 
 target_link_libraries( a1_transform_publisher
-${LCM_LIBRARY}
 ${catkin_LIBRARIES}
+lcm
 )
 
 add_executable(a1_command_publisher src/a1_command_publisher.cpp)
 
 target_link_libraries( a1_command_publisher
-${LCM_LIBRARY}
 ${catkin_LIBRARIES}
+lcm
+)
+
+add_executable(a1_local_planner src/a1_local_planner.cpp)
+
+target_link_libraries(a1_local_planner
+${catkin_LIBRARIES}
+strelka_robots
+lcm
 )
