@@ -1,0 +1,18 @@
+length_in_x: 1.5
+length_in_y: 1.5
+position_x: 0.0
+position_y: 0.0
+resolution: 0.01
+min_variance: 0.0001
+max_variance: 0.3
+mahalanobis_distance_threshold: 1.0
+multi_height_noise: 0.001
+
+initialize_elevation_map: true
+initialization_method: 0
+length_in_x_init_submap: 0.9
+length_in_y_init_submap: 0.9
+init_submap_height_offset: -0.02
+margin_init_submap: 0.3
+target_frame_init_submap: FR_foot
+scanning_duration: 0.2

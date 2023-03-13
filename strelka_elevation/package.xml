@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>strelka_elevation</name>
+  <version>1.0.0</version>
+  <url type="website">http://github.com/anybotics/elevation_mapping</url>
+  <description>Custom elevation mapping filters and configs for strelka_ros</description>
+  <license>BSD</license>
+  <maintainer email="e.zalyaev@innopolis.ru">Eduard Zaliaev</maintainer>
+  <author email="e.zalyaev@innopolis.ru">Eduard Zaliaev</author>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>elevation_mapping</depend>
+  <depend>grid_map_rviz_plugin</depend>
+  <depend>rviz</depend>
+
+  <exec_depend>nodelet</exec_depend>
+  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>grid_map_visualization</exec_depend>
+  <exec_depend>pcl_ros</exec_depend>
+  <exec_depend>point_cloud_io</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>tf</exec_depend>
+  <build_depend>filters</build_depend>
+  <exec_depend>filters</exec_depend>
+  <depend>grid_map_core</depend>
+  <depend>grid_map_ros</depend>
+  <depend>grid_map_msgs</depend>
+  <depend>tbb</depend>
+  <exec_depend>xacro</exec_depend>
+  <export>
+    <filters plugin="${prefix}/filter_plugins.xml" />
+  </export>
+</package>

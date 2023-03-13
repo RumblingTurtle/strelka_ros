@@ -18,6 +18,9 @@ roslaunch strelka_ros a1_livox.launch
 
 # Without livox
 roslaunch strelka_ros normal.launch
+
+# Livox can have custom pitch value
+roslaunch strelka_ros a1_livox.launch livox_pitch:=0.9
 ```
 ### Run low level control and state estimation
 

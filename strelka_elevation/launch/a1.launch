@@ -1,0 +1,13 @@
+<launch> 
+  <arg name="map_type" default="default"/>
+
+  <!-- Elevation mapping node -->
+  <node pkg="elevation_mapping" type="elevation_mapping" name="elevation_mapping" output="screen">
+    <rosparam command="load" file="$(find strelka_elevation)/config/robots/a1.yaml" />
+    <rosparam command="load" file="$(find strelka_elevation)/config/elevation_maps/a1_map.yaml" />
+    <rosparam command="load" file="$(find strelka_elevation)/config/postprocessing/postprocessor_$(arg map_type).yaml" />
+  </node>
+
+  <!-- Launch visualizations for the resulting elevation map -->
+  <include file="$(find elevation_mapping_demos)/launch/visualization.launch" />
+</launch>

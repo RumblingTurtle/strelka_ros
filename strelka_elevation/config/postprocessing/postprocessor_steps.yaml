@@ -1,0 +1,88 @@
+postprocessor_pipeline: # set by postprocessor_pipeline_name
+  # Fill holes in the map with inpainting.
+  - name: inpaint
+    type: elevationMappingFilters/ConstInpaint
+    params:
+      input_layer: elevation
+      output_layer: elevation_inpainted
+      fill_value: -5
+      radius: 0.02
+
+  # Compute Surface normals
+  - name: surface_normals
+    type: gridMapFilters/NormalVectorsFilter
+    params:
+      input_layer: elevation_inpainted
+      output_layers_prefix: normal_vectors_
+      radius: 0.02
+      normal_vector_positive_axis: z
+
+  - name: sdf
+    type: elevationMappingFilters/SDF2D
+    params:
+      input_layer: normal_vectors_z
+      output_layer: sdf
+      threshold: 0.6
+      safe_zone: 0.0 #cm
+      radius: 0.10
+
+  # Slope from surface normals.
+  - name: slope
+    type: gridMapFilters/MathExpressionFilter
+    params:
+      output_layer: slope
+      expression: acos(normal_vectors_z)
+      
+  # Std calculation (edges detection)
+  - name: std_slope
+    type: elevationMappingFilters/SlidingWindowExpressionFilter
+    params:
+      input_layer: slope
+      output_layer: std_slope  
+      window_length: 0.05
+      expression: sqrt(sumOfFinites(square(slope - meanOfFinites(slope))) ./ numberOfFinites(slope))
+      clamp_value: 1.57079632 #Pi/2
+      normalize: true
+      compute_empty_cells: false
+      edge_handling: crop
+
+  # Mean height calculation
+  - name: mean_height
+    type: elevationMappingFilters/SlidingWindowExpressionFilter
+    params:
+      input_layer: elevation_inpainted
+      output_layer: mean_height
+      window_length: 0.05
+      expression: meanOfFinites(elevation_inpainted) 
+      compute_empty_cells: false
+      edge_handling: crop
+
+  # Mean slope calculation
+  - name: mean_slope
+    type: elevationMappingFilters/SlidingWindowExpressionFilter
+    params:
+      input_layer: slope
+      output_layer: mean_slope
+      window_length: 0.05
+      expression: meanOfFinites(slope) 
+      clamp_value: 1.57079632 #Pi/2
+      normalize: true
+      compute_empty_cells: false
+      edge_handling: crop
+
+
+  # Roughness calculation
+  - name: roughness
+    type: elevationMappingFilters/MathExpressionFilter
+    params:
+      output_layer: roughness
+      clamp_value: 0.12
+      normalize: true
+      expression: abs(elevation_inpainted - mean_height)
+      
+   # Scores calculation
+  - name: scores
+    type: gridMapFilters/MathExpressionFilter
+    params:
+      output_layer: scores
+      expression: 0.33*mean_slope + 0.33*std_slope + 0.33*roughness

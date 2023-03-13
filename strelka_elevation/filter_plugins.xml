@@ -1,0 +1,37 @@
+<class_libraries>
+  <library path="lib/libstrelka_elevation_plugins">
+
+    <class name="elevationMappingFilters/SDF2D" type="strelka_elevation::SDF2D" base_class_type="filters::FilterBase<grid_map::GridMap>" >
+      <description>
+        Simple normal based 2D SDF filter
+      </description>
+    </class>
+
+    <class name="elevationMappingFilters/ConstInpaint" type="strelka_elevation::ConstInpaint" base_class_type="filters::FilterBase<grid_map::GridMap>" >
+      <description>
+        Nan value dilator
+      </description>
+    </class>
+
+    <class name="elevationMappingFilters/StepFilter" type="strelka_elevation::StepFilter" base_class_type="filters::FilterBase<grid_map::GridMap>" >
+      <description>
+        Multistep threshold filter
+      </description>
+    </class>
+
+    <class name="elevationMappingFilters/SlidingWindowExpressionFilter" type="strelka_elevation::SlidingWindowExpressionFilter" base_class_type="filters::FilterBase<grid_map::GridMap>" >
+      <description>
+        Parse and evaluate a mathematical matrix expression within a sliding window on a layer of a grid map.
+      </description>
+    </class>
+
+    <class name="elevationMappingFilters/MathExpressionFilter" type="strelka_elevation::MathExpressionFilter" base_class_type="filters::FilterBase<grid_map::GridMap>" >
+      <description>
+        Parse and evaluate a mathematical expression with clamping and normalizing capabilities
+      </description>
+    </class>
+
+  </library>
+</class_libraries>
+
+
