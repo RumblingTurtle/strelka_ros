@@ -1,4 +1,6 @@
 <launch>
-   <include file="$(find unitree_gazebo)/launch/normal.launch" args="rname=a1"/>
+   <include file="$(find unitree_gazebo)/launch/normal.launch">
+      <arg name="rname" value="a1"/>
+   </include>
    <include file="$(find strelka_ros)/launch/a1_lcm_to_ros_bridge.launch"/>
 </launch>
