@@ -1,0 +1,4 @@
+
+<launch>
+    <node name="a1_elevation_aware_local_planner" pkg="strelka_ros" type="a1_elevation_aware_local_planner" output="screen"/>
+</launch>

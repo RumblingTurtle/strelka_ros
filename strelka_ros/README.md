@@ -5,10 +5,10 @@ A package to provide plug-in for [Livox Series LiDAR](https://www.livoxtech.com)
 - ROS(=Melodic,Noetic)
 - Gazebo (= 9.x+, http://gazebosim.org/)
 - Ubuntu(=18.04,20.04)
-- unitree_ros https://github.com/unitreerobotics/unitree_ros
 - livox_laser_simulation (custom fork https://github.com/RumblingTurtle/livox_laser_simulation)
+- unitree_ros https://github.com/unitreerobotics/unitree_ros
 - strelka library (https://github.com/RumblingTurtle/strelka)
-
+- grid_map
 ## Usage
 
 ### Start simulation
