@@ -46,23 +46,39 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(a1_transform_publisher src/a1_transform_publisher.cpp)
+add_executable(a1_transform_publisher src/A1/a1_transform_publisher.cpp)
 
 target_link_libraries( a1_transform_publisher
 ${catkin_LIBRARIES}
 lcm
 )
 
-add_executable(a1_command_publisher src/a1_command_publisher.cpp)
+add_executable(a1_command_publisher src/A1/a1_command_publisher.cpp)
 
 target_link_libraries( a1_command_publisher
 ${catkin_LIBRARIES}
 lcm
 )
 
-add_executable(a1_local_planner src/a1_local_planner.cpp)
+add_executable(a1_local_planner src/A1/a1_local_planner.cpp)
 
 target_link_libraries(a1_local_planner
+${catkin_LIBRARIES}
+strelka_robots
+lcm
+)
+
+add_executable(a1_state_estimator src/A1/a1_state_estimator.cpp)
+
+target_link_libraries(a1_state_estimator
+${catkin_LIBRARIES}
+strelka_robots
+lcm
+)
+
+add_executable(a1_wbic src/A1/a1_wbic.cpp)
+
+target_link_libraries(a1_wbic
 ${catkin_LIBRARIES}
 strelka_robots
 lcm

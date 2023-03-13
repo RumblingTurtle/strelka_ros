@@ -1,4 +1,4 @@
-#include <strelka_ros/a1_command_publisher.hpp>
+#include <strelka_ros/A1/a1_command_publisher.hpp>
 
 int main(int argc, char **argv) {
   ros::init(argc, argv, "a1_command_publisher");

@@ -1,0 +1,3 @@
+<launch>
+    <node name="a1_state_estimator" pkg="strelka_ros" type="a1_state_estimator" output="screen"/>
+</launch>

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<robot name="a1_description" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find a1_description)/xacro/robot.xacro"/>
+    <xacro:include filename = "$(find livox_laser_simulation)/urdf/livox_mid70_custom.xacro"/>
+
+    <joint name="scan_joint" type="fixed">
+        <parent link="trunk"/>
+        <child link="livox_base"/>
+        <origin xyz="0.3 0.0 0.1" rpy="0 $(arg LIVOX_PITCH) 0"/>
+    </joint>
+
+    <xacro:Livox_Mid70/>
+</robot>
