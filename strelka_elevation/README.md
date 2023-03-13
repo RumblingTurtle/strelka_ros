@@ -9,3 +9,6 @@
 ```
 roslaunch strelka_elevation a1.launch map_type:=[stairs,steps,default]
 ```
+
+
+![](resources/elevation.gif)
