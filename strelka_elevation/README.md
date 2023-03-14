@@ -3,7 +3,12 @@
 ## Requirements
 
 - strelka_ros (https://github.com/RumblingTurtle/strelka_ros)
-- elevation_mapping (https://github.com/ANYbotics/elevation_mapping)
+- elevation_mapping (https://github.com/ANYbotics/elevation_mapping) 
+
+Make sure to build catkin workspace in release mode. This will greatly improve elevation mapping processing times
+```
+catkin build -DCMAKE_BUILD_TYPE=Release
+```
 
 ## Usage 
 ```

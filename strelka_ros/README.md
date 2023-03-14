@@ -22,7 +22,7 @@ roslaunch strelka_ros normal.launch
 # Livox can have custom pitch value
 roslaunch strelka_ros a1_livox.launch livox_pitch:=0.9
 ```
-### Run low level control and state estimation
+### Run low level control and state estimation separately
 
 ```
 # Start WBIC and state estimation node together
@@ -34,8 +34,16 @@ roslaunch strelka_ros a1_wbic.launch
 ```
 ### Start local planner node
 ```
+# Blind local planner node 
 roslaunch strelka_ros a1_local_planner.launch
-```
 
+# Elevation aware planner
+roslaunch strelka_ros a1_elevation_aware_local_planner.launch
+roslaunch strelka_elevation a1.launch map_type:=steps
+```
+### Run full controller pipeline
+```
+roslaunch strelka_ros a1_full_pipeline.launch blind:=false/true
+```
 ## Livox mid-70 mount
 ![](resources/livox.gif)

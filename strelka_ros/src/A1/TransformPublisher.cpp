@@ -13,8 +13,8 @@ int main(int argc, char **argv) {
       lcm.subscribe(strelka::A1::constants::ROBOT_STATE_TOPIC_NAME,
                     &Handler::handle, &handler);
 
-  while (0 == lcm.handle() && ros::ok())
-    ;
+  while (0 == lcm.handle() && ros::ok()) {
+  };
 
   lcm.unsubscribe(sub);
   return 0;

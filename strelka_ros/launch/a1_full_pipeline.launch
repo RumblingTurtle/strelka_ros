@@ -1,0 +1,19 @@
+
+
+<launch>
+    <arg name="blind" default="true"/>
+
+    <node name="a1_wbic" pkg="strelka_ros" type="a1_wbic" output="screen"/>
+    <node name="a1_state_estimator" pkg="strelka_ros" type="a1_state_estimator" output="screen"/>
+
+    <group if="$(eval arg('blind') == 1)">
+        <node name="a1_local_planner" pkg="strelka_ros" type="a1_local_planner" output="screen"/>
+    </group>
+
+    <group if="$(eval arg('blind') == 0)">
+        <node name="a1_elevation_aware_local_planner" pkg="strelka_ros" type="a1_elevation_aware_local_planner" output="screen"/>
+        <include file="$(find strelka_elevation)/launch/a1.launch">
+            <arg name="map_type" value="steps"/>
+        </include>
+    </group>
+</launch>

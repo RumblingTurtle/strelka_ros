@@ -1,4 +1,7 @@
 
 <launch>
     <node name="a1_elevation_aware_local_planner" pkg="strelka_ros" type="a1_elevation_aware_local_planner" output="screen"/>
+    <include file="$(find strelka_elevation)/launch/a1.launch">
+        <arg name="map_type" value="steps"/>
+    </include>
 </launch>
