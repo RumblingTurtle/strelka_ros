@@ -16,4 +16,6 @@
             <arg name="map_type" value="steps"/>
         </include>
     </group>
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find strelka_ros)/rviz/a1.rviz" />
+
 </launch>
