@@ -1,6 +1,7 @@
 #include <grid_map_core/grid_map_core.hpp>
 #include <strelka/control/FootholdPlanner.hpp>
 #include <strelka/control/gait/GaitScheduler.hpp>
+#include <strelka_robots/A1/kinematics.hpp>
 
 using namespace grid_map;
 using namespace strelka;
@@ -31,12 +32,15 @@ public:
       nominalFootPosition(2) = getFoothold(legId, 0)(2);
       return nominalFootPosition;
     }
+
     Position nominalPositionCenter =
         nominalFootPosition.cast<double>().block<2, 1>(0, 0);
 
     try {
-      nominalFootPosition(2) =
-          map.atPosition("elevation_inpainted", nominalPositionCenter);
+      float nominalPosElevation =
+          map.atPosition("elevation_inpainted", nominalPositionCenter) +
+          robot.footRadius();
+      nominalFootPosition(2) = nominalPosElevation;
     } catch (const std::out_of_range &ex) {
       ROS_INFO_STREAM("Failed to get elevation at" << nominalPositionCenter);
       ROS_INFO_STREAM(ex.what());

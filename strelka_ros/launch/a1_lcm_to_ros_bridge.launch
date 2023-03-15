@@ -1,4 +1,3 @@
 <launch>
     <node name="a1_command_publisher" pkg="strelka_ros" type="a1_command_publisher" output="screen"/>
-    <node name="a1_transform_publisher" pkg="strelka_ros" type="a1_transform_publisher" output="screen"/>
 </launch>
