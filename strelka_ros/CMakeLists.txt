@@ -83,7 +83,7 @@ strelka_robots
 lcm
 )
 
-add_executable(a1_elevation_aware_local_planner src/A1/ElevationAwareLocalPlanner.cpp)
+add_executable(a1_elevation_aware_local_planner src/A1/ElevationAwareFootPlanner.cpp src/A1/ElevationAwareLocalPlanner.cpp)
 
 target_link_libraries(a1_elevation_aware_local_planner
 ${catkin_LIBRARIES}

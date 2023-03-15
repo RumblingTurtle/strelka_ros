@@ -64,9 +64,9 @@
   <exec_depend>grid_map_core</exec_depend>
   <exec_depend>grid_map_ros</exec_depend>
   <exec_depend>grid_map_msgs</exec_depend>
-  <!-- The export tag contains other, unspecified, tags -->
-  <export>
-    <!-- Other tools can request additional information be placed here -->
 
+  <exec_depend>gazebo_ros</exec_depend> 
+  <export> 
+    <gazebo_ros gazebo_model_path="${prefix}/models"/> 
   </export>
 </package>
