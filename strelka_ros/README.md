@@ -51,7 +51,8 @@ roslaunch strelka_ros a1_high_command_publisher.launch velocityX:=.. velocityY:=
 ```
 ### Or run full controller pipeline
 ```
-roslaunch strelka_ros a1_full_pipeline.launch blind:=false/true
+# Args are optional
+roslaunch strelka_ros a1_full_pipeline.launch blind:=false/true  velocityX:=.. velocityY:=.. velocityYaw:=.. footHeight:= .. bodyHeight:= ..
 ```
 ## Livox mid-70 mount
 ![](resources/livox.gif)
