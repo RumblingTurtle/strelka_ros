@@ -46,13 +46,21 @@ roslaunch strelka_elevation a1.launch map_type:=steps
 ```
 ### Publish high level command
 ```
-# Args are optional
-roslaunch strelka_ros a1_high_command_publisher.launch velocityX:=.. velocityY:=.. velocityYaw:=.. footHeight:= .. bodyHeight:= ..
+roslaunch strelka_ros a1_high_command_publisher.launch
 ```
 ### Or run full controller pipeline
 ```
-# Args are optional
-roslaunch strelka_ros a1_full_pipeline.launch blind:=false/true  velocityX:=.. velocityY:=.. velocityYaw:=.. footHeight:= .. bodyHeight:= ..
+roslaunch strelka_ros a1_full_pipeline.launch blind:=false/true
+```
+
+### Edit pipeline parameters using yaml config
+```
+#config/a1_full_pipeline.yaml
+    velocityX: 0.2
+    velocityY: 0.0
+    velocityYaw: 0.0 
+    footHeight: 0.08 
+    bodyHeight: 0.26 
 ```
 ## Livox mid-70 mount
 ![](resources/livox.gif)
