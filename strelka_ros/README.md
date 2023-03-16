@@ -44,7 +44,12 @@ roslaunch strelka_ros a1_local_planner.launch
 roslaunch strelka_ros a1_elevation_aware_local_planner.launch
 roslaunch strelka_elevation a1.launch map_type:=steps
 ```
-### Run full controller pipeline
+### Publish high level command
+```
+# Args are optional
+roslaunch strelka_ros a1_high_command_publisher.launch velocityX:=.. velocityY:=.. velocityYaw:=.. footHeight:= .. bodyHeight:= ..
+```
+### Or run full controller pipeline
 ```
 roslaunch strelka_ros a1_full_pipeline.launch blind:=false/true
 ```

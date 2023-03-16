@@ -4,9 +4,24 @@
     <arg name="blind" default="true"/>
     <arg name="elevation_start_delay" default="5"/>
 
+    <arg name="velocityX" default="0.0"/>
+    <arg name="velocityY" default="0.0"/>
+    <arg name="velocityYaw" default="0.0"/>
+
+    <arg name="footHeight" default="0.08"/>
+    <arg name="bodyHeight" default="0.26"/>
+
+    <include file="$(find strelka_ros)/launch/a1_high_command_publisher.launch">
+        <arg name="velocityX"   value="$(arg velocityX)"/>
+        <arg name="velocityY"   value="$(arg velocityY)"/>
+        <arg name="velocityYaw" value="$(arg velocityYaw)"/>
+        <arg name="footHeight"  value="$(arg footHeight)"/>
+        <arg name="bodyHeight"  value="$(arg bodyHeight)"/>
+    </include>
+    
     <node name="a1_wbic" pkg="strelka_ros" type="a1_wbic" output="screen"/>
     <node name="a1_state_estimator" pkg="strelka_ros" type="a1_state_estimator" output="screen"/>
-    
+
     <node name="a1_transform_publisher" pkg="strelka_ros" type="a1_transform_publisher" output="screen"/>
     <group if="$(eval arg('blind') == 1)">
         <node name="a1_local_planner" pkg="strelka_ros" type="a1_local_planner" output="screen"/>
@@ -23,5 +38,6 @@
     </group>
 
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find strelka_ros)/rviz/a1.rviz" />
+
 
 </launch>

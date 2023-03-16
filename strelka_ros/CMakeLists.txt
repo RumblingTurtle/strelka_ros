@@ -52,9 +52,9 @@ ${catkin_LIBRARIES}
 lcm
 )
 
-add_executable(a1_command_publisher src/A1/CommandPublisher.cpp)
+add_executable(a1_bridge src/A1/A1Bridge.cpp)
 
-target_link_libraries( a1_command_publisher
+target_link_libraries( a1_bridge
 ${catkin_LIBRARIES}
 lcm
 )
@@ -91,3 +91,13 @@ strelka
 strelka_robots
 lcm
 )
+
+add_executable(a1_high_command_publisher src/A1/HighLevelCommandPublisher.cpp)
+
+target_link_libraries(a1_high_command_publisher 
+${catkin_LIBRARIES}
+strelka
+strelka_robots
+lcm
+)
+

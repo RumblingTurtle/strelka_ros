@@ -1,4 +1,4 @@
-#include <strelka_ros/A1/CommandPublisher.hpp>
+#include <strelka_ros/A1/A1Bridge.hpp>
 
 int main(int argc, char **argv) {
   ros::init(argc, argv, "a1_command_publisher");
@@ -16,7 +16,8 @@ int main(int argc, char **argv) {
   ros::Rate loop_rate(1000);
 
   while (ros::ok()) {
-    listen_publish_obj.lcm.publish("raw_state", &(listen_publish_obj.state));
+    listen_publish_obj.lcm.publish(strelka::A1::constants::RAW_STATE_TOPIC_NAME,
+                                   &(listen_publish_obj.state));
     loop_rate.sleep();
   }
 

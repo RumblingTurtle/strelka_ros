@@ -9,6 +9,7 @@
 #include <strelka_messages/a1_lcm_msgs/RobotGazeboState.hpp>
 #include <strelka_messages/a1_lcm_msgs/RobotLowCommand.hpp>
 #include <strelka_messages/a1_lcm_msgs/RobotRawState.hpp>
+#include <strelka_robots/A1/constants.hpp>
 #include <string>
 #include <thread>
 #include <unitree_legged_msgs/LowCmd.h>
