@@ -1,6 +1,11 @@
-#include <cmath>
-#include <grid_map_core/grid_map_core.hpp>
 #include <ros/ros.h>
+
+#include <grid_map_core/grid_map_core.hpp>
+#include <grid_map_msgs/GridMap.h>
+#include <grid_map_ros/grid_map_ros.hpp>
+
+#include <cmath>
+
 #include <strelka/control/FootholdPlanner.hpp>
 #include <strelka/control/gait/GaitScheduler.hpp>
 #include <strelka_robots/A1/kinematics.hpp>
@@ -10,17 +15,16 @@ using namespace strelka;
 using namespace strelka::control;
 
 class ElevationAwareFootPlanner : public FootholdPlanner {
-  bool _firstMapRecieved;
-
 public:
   GridMap map;
   float _searchRadius;
+  bool firstMapRecieved;
+  ros::Subscriber mapSub;
+
+  void setMap(const grid_map_msgs::GridMap &newMap);
+
   ElevationAwareFootPlanner(std::shared_ptr<GaitScheduler> scheduler,
-                            float searchRadius);
-
-  bool firstMapRecieved();
-
-  void setFirstMapRecieved();
+                            float searchRadius, ros::NodeHandle &nh);
 
   Vec3<float> adjustFoothold(Vec3<float> nominalFootPosition,
                              Vec3<float> currentRobotPosition,

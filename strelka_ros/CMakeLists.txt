@@ -101,3 +101,12 @@ strelka_robots
 lcm
 )
 
+add_executable(a1_cheater_state_estimator src/A1/A1CheaterEstimator.cpp)
+
+target_link_libraries(a1_cheater_state_estimator 
+${catkin_LIBRARIES}
+strelka
+strelka_robots
+lcm
+)
+

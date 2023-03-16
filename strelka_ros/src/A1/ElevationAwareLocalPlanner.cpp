@@ -1,16 +1,25 @@
-#include <strelka_ros/A1/ElevationAwareLocalPlanner.hpp>
+#include <chrono>
+#include <iostream>
+#include <lcm/lcm-cpp.hpp>
 
-ElevationAwareLocalPlanner::ElevationAwareLocalPlanner(
-    std::shared_ptr<ElevationAwareFootPlanner> footPlanner, ros::NodeHandle nh)
-    : _footPlanner(footPlanner), A1LocalPlanner(footPlanner) {}
+#include <grid_map_msgs/GridMap.h>
+#include <grid_map_ros/grid_map_ros.hpp>
+#include <ros/ros.h>
 
-void ElevationAwareLocalPlanner::elevationMapCallback(
-    const grid_map_msgs::GridMap::ConstPtr &map) {
-  grid_map::GridMapRosConverter::fromMessage(*map, _footPlanner->map);
-  if (!_footPlanner->firstMapRecieved()) {
-    _footPlanner->setFirstMapRecieved();
-  }
-}
+#include <strelka_ros/ElevationAwareFootPlanner.hpp>
+
+#include <strelka_messages/HighLevelCommand.hpp>
+#include <strelka_messages/a1_lcm_msgs/WbicCommand.hpp>
+
+#include <strelka_robots/A1/UnitreeA1.hpp>
+#include <strelka_robots/A1/constants.hpp>
+
+#include <strelka/common/macros.hpp>
+#include <strelka/common/typedefs.hpp>
+#include <strelka_robots/A1/control/A1LocalPlanner.hpp>
+
+using namespace strelka;
+using namespace strelka::control;
 
 int main(int argc, char **argv) {
   using namespace strelka::control;
@@ -22,19 +31,13 @@ int main(int argc, char **argv) {
       std::make_shared<GaitScheduler>(strelka::GAITS::TROT);
 
   std::shared_ptr<ElevationAwareFootPlanner> footPlanner =
-      std::make_shared<ElevationAwareFootPlanner>(gaitScheduler, 0.15);
-  ElevationAwareLocalPlanner planner{footPlanner, nh};
+      std::make_shared<ElevationAwareFootPlanner>(gaitScheduler, 0.15, nh);
 
-  ros::Subscriber mapSub =
-      nh.subscribe("/elevation_mapping/elevation_map_raw", 1,
-                   &ElevationAwareLocalPlanner::elevationMapCallback, &planner);
+  A1LocalPlanner planner{footPlanner};
 
-  while (!footPlanner->firstMapRecieved() && ros::ok()) {
+  while (ros::ok()) {
     ros::spinOnce();
-  }
-
-  while (planner.handle() && ros::ok()) {
-    ros::spinOnce();
+    planner.handle();
   };
 
   return 0;

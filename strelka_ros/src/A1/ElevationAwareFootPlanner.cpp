@@ -1,24 +1,26 @@
 #include <strelka_ros/ElevationAwareFootPlanner.hpp>
 
 ElevationAwareFootPlanner::ElevationAwareFootPlanner(
-    std::shared_ptr<GaitScheduler> scheduler, float searchRadius)
-    : FootholdPlanner(scheduler), _firstMapRecieved(false),
-      _searchRadius(searchRadius) {
+    std::shared_ptr<GaitScheduler> scheduler, float searchRadius,
+    ros::NodeHandle &nh)
+    : FootholdPlanner(scheduler), _searchRadius(searchRadius),
+      firstMapRecieved(false) {
   assert(searchRadius > 0);
+  mapSub = nh.subscribe("/elevation_mapping/elevation_map_raw", 1,
+                        &ElevationAwareFootPlanner::setMap, this);
 }
 
-bool ElevationAwareFootPlanner::firstMapRecieved() {
-  return _firstMapRecieved;
-};
-
-void ElevationAwareFootPlanner::setFirstMapRecieved() {
-  _firstMapRecieved = true;
-};
+void ElevationAwareFootPlanner::setMap(const grid_map_msgs::GridMap &newMap) {
+  grid_map::GridMapRosConverter::fromMessage(newMap, map);
+  if (!firstMapRecieved) {
+    firstMapRecieved = true;
+  }
+}
 
 Vec3<float> ElevationAwareFootPlanner::adjustFoothold(
     Vec3<float> nominalFootPosition, Vec3<float> currentRobotPosition,
     Mat3<float> currentRobotRotation, int legId, robots::Robot &robot) {
-  if (!firstMapRecieved()) {
+  if (!firstMapRecieved) {
     nominalFootPosition(2) = getFoothold(legId, 0)(2);
     return nominalFootPosition;
   }
@@ -54,11 +56,13 @@ Vec3<float> ElevationAwareFootPlanner::adjustFoothold(
     if (std::isnan(score)) {
       continue;
     }
+
     if (std::isnan(bestScore) || score < bestScore) {
       bestIndex = *iterator;
       bestScore = score;
     }
   }
+
   if (std::isnan(bestScore)) {
     return nominalFootPosition;
   }
@@ -67,7 +71,7 @@ Vec3<float> ElevationAwareFootPlanner::adjustFoothold(
 
   map.getPosition3("elevation_inpainted", bestIndex, bestPosition);
   bestPosition(2) += robot.footRadius();
-  return nominalFootPosition.cast<float>();
+  return bestPosition.cast<float>();
 }
 
 float ElevationAwareFootPlanner::evalFoothold(

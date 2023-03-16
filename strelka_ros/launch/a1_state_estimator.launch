@@ -1,3 +1,12 @@
 <launch>
-    <node name="a1_state_estimator" pkg="strelka_ros" type="a1_state_estimator" output="screen"/>
+    <arg name="perfect_odometry" default="true"/>
+
+    <node name="a1_transform_publisher" pkg="strelka_ros" type="a1_transform_publisher" output="screen"/>
+    <group if="$(eval arg('perfect_odometry') == 0)">
+        <node name="a1_state_estimator" pkg="strelka_ros" type="a1_state_estimator" output="screen"/>
+    </group>
+
+    <group if="$(eval arg('perfect_odometry') == 1)">
+        <node name="a1_state_estimator" pkg="strelka_ros" type="a1_cheater_state_estimator" output="screen"/>
+    </group>
 </launch>
