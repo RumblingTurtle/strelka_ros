@@ -19,8 +19,10 @@ class A1CheaterEstimator {
 
   lcm::Subscription *subRawState;
   lcm::Subscription *subGazebo;
-
+  float trunkToFootZOffset;
+  Vec3<float> zeroOffset;
   bool gazeboStateRecieved;
+
   void update(const lcm::ReceiveBuffer *rbuf, const std::string &chan,
               const a1_lcm_msgs::RobotRawState *messageIn);
   void updateGazebo(const lcm::ReceiveBuffer *rbuf, const std::string &chan,
@@ -31,6 +33,7 @@ class A1CheaterEstimator {
 
 public:
   A1CheaterEstimator();
+  void setupZOffset();
   void processLoop();
   bool handle();
   ~A1CheaterEstimator();

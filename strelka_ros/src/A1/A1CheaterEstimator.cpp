@@ -3,17 +3,40 @@
 #include <ros/ros.h>
 #include <std_srvs/Empty.h>
 #include <strelka_robots/A1/interfaces/A1GazeboInterface.hpp>
+#include <tf/transform_listener.h>
 
-A1CheaterEstimator::A1CheaterEstimator() : gazeboStateRecieved(false) {
+A1CheaterEstimator::A1CheaterEstimator()
+    : gazeboStateRecieved(false), trunkToFootZOffset(0) {
   robotStateMsg = new a1_lcm_msgs::RobotState();
   robotGazeboMsg = new a1_lcm_msgs::RobotGazeboState();
-
+  zeroOffset = Vec3<float>::Zero();
   subGazebo = lcm.subscribe(strelka::A1::constants::GAZEBO_STATE_TOPIC_NAME,
                             &A1CheaterEstimator::updateGazebo, this);
   subRawState = lcm.subscribe(strelka::A1::constants::RAW_STATE_TOPIC_NAME,
                               &A1CheaterEstimator::update, this);
   subGazebo->setQueueCapacity(1);
   subRawState->setQueueCapacity(1);
+  setupZOffset();
+  handle();
+}
+
+void A1CheaterEstimator::setupZOffset() {
+  bool transformRecieved = false;
+  tf::TransformListener listener;
+  tf::StampedTransform transform;
+  while (ros::ok() && !transformRecieved) {
+    try {
+      listener.lookupTransform("/trunk", "/FR_foot", ros::Time(0), transform);
+      transformRecieved = true;
+    } catch (tf::TransformException &ex) {
+      ROS_ERROR("%s", ex.what());
+      ros::Duration(0.1).sleep();
+      continue;
+    }
+  }
+
+  trunkToFootZOffset =
+      -transform.getOrigin().z() + strelka::A1::constants::FOOT_RADIUS;
 }
 
 void A1CheaterEstimator::processLoop() {
@@ -61,6 +84,9 @@ void A1CheaterEstimator::updateGazebo(
   memcpy(robotGazeboMsg, messageIn, sizeof(a1_lcm_msgs::RobotGazeboState));
   if (!gazeboStateRecieved) {
     gazeboStateRecieved = true;
+    zeroOffset = Eigen::Map<const Vec3<float>>(messageIn->position_world, 3);
+    // Approximate height from trunk to feet
+    zeroOffset(2) -= trunkToFootZOffset;
   }
 }
 
@@ -74,11 +100,14 @@ void A1CheaterEstimator::update(const lcm::ReceiveBuffer *rbuf,
   strelka::robots::UnitreeA1 robot(messageIn);
   propagateRobotRawState(messageIn, robotStateMsg);
 
-  memcpy(robotStateMsg->position, robotGazeboMsg->position_world,
-         sizeof(float) * 3);
+  Vec3<float> positionWorld =
+      Eigen::Map<const Vec3<float>>(robotGazeboMsg->position_world, 3) -
+      zeroOffset;
+
+  memcpy(robotStateMsg->position, positionWorld.data(), sizeof(float) * 3);
 
   Vec3<float> velocityBody = robot.rotateWorldToBodyFrame(
-      Eigen::Map<Vec3<float>>(robotGazeboMsg->velocity_world, 3));
+      Eigen::Map<const Vec3<float>>(robotGazeboMsg->velocity_world, 3));
 
   memcpy(robotStateMsg->velocityBody, velocityBody.data(), sizeof(float) * 3);
 
@@ -105,13 +134,10 @@ int main(int argc, char **argv) {
 
   std_srvs::Empty resetObj;
   ros::service::call("/gazebo/reset_world", resetObj);
-
   ros::Duration(1.0).sleep();
-
   interface.moveToStand();
 
   A1CheaterEstimator estimator{};
-
   while (estimator.handle() && ros::ok()) {
   }
 
