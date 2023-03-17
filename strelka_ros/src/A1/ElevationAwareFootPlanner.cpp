@@ -100,9 +100,7 @@ float ElevationAwareFootPlanner::evalFoothold(
     return std::nanf("0");
   }
 
-  float currentFootholdHeight = getFoothold(legId, 0)(2);
-
-  if (std::abs(currentFootholdHeight - height) > heightDifferenceThreshold) {
+  if (std::abs(getFoothold(legId, 0)(2) - height) > heightDifferenceThreshold) {
     // Swing height too high
     return std::nanf("0");
   }
@@ -117,8 +115,7 @@ float ElevationAwareFootPlanner::evalFoothold(
     float distToNominal =
         (nominalPosition - footholdPosition.cast<float>()).norm();
 
-    distScore =
-        distToNominal > maxDistToNominal ? 1 : distToNominal / maxDistToNominal;
+    distScore = distToNominal > maxDistToNominal ? 1 : distToNominal;
   }
 
   return curvature + distScore;
