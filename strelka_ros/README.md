@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="resources/demo.gif" alt="animated" />
+</p>
+
 # ROS support for strelka library
 - Gazebo launch files for UnitreeA1 robot
 - Livox mid-70 robot mount
@@ -50,6 +54,3 @@ roslaunch strelka_ros a1_high_command_publisher.launch
     bodyHeight: 0.26 
     gait: [trot|stand|flytrot|step|pronk]
 ```
-
-## Livox mid-70 mount
-![](resources/livox.gif)

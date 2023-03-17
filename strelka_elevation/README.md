@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="resources/elevation.gif" alt="animated" />
+</p>
+
 # Overview
 Custom set of elevation_mapping filters and configs for [strelka_ros](https://github.com/RumblingTurtle/strelka_ros/tree/master/strelka_ros).
 
@@ -49,4 +53,3 @@ catkin build -DCMAKE_BUILD_TYPE=Release
 ```
 roslaunch strelka_elevation a1.launch map_type:=[stairs,steps,default]
 ```
-![](resources/elevation.gif)

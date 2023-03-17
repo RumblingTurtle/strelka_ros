@@ -1,7 +1,7 @@
 
-velocityX: 0.15
+velocityX: 0.0
 velocityY: 0.0
-velocityYaw: 0.0 
+velocityYaw: 0.3 
 footHeight: 0.12 
 bodyHeight: 0.26 
 gait: trot
