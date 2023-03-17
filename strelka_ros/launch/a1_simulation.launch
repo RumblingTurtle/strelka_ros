@@ -11,9 +11,8 @@
     <arg name="debug" default="false"/>
     <!-- Debug mode will hung up the robot, use "true" or "false" to switch it. -->
     <arg name="user_debug" default="false"/>
-    <!-- Set true if collsions as simple geometries are needed and false if only feet collisions are needed -->
-    <arg name="simple_collision" default="false"/>
-    <arg name="livox_pitch" default="0"/>
+    <arg name="lidar" default="false"/>
+    <arg name="lidar_pitch" default="0"/>
     
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
         <arg name="world_name" value="$(find strelka_ros)/worlds/$(arg wname).world"/>
@@ -25,9 +24,17 @@
     </include>
 
     <!-- Load the URDF into the ROS Parameter Server -->
-    <param name="robot_description"
+    <group if="$(eval arg('lidar') == 1)">
+      <param name="robot_description"
            command="$(find xacro)/xacro --inorder '$(arg dollar)$(arg base_path)/urdf/a1_livox.xacro' 
-           DEBUG:=$(arg user_debug) SIMPLE_COLLISION:=$(arg simple_collision) LIVOX_PITCH:=$(arg livox_pitch)"/>
+           DEBUG:=$(arg user_debug) LIVOX_PITCH:=$(arg lidar_pitch)"/>
+    </group>
+
+    <group if="$(eval arg('lidar') == 0)">
+        <param name="robot_description"
+            command="$(find xacro)/xacro --inorder '$(arg dollar)$(arg robot_path)/xacro/robot.xacro' 
+            DEBUG:=$(arg user_debug)"/>
+    </group>
 
     <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
     <!-- Set trunk and joint positions at startup -->
@@ -52,4 +59,5 @@
     </node>
     
     <include file="$(find strelka_ros)/launch/a1_lcm_to_ros_bridge.launch"/>
+
 </launch>

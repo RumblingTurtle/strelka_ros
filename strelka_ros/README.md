@@ -16,17 +16,7 @@ A package to provide plug-in for [Livox Series LiDAR](https://www.livoxtech.com)
 
 ### Start simulation
 ```
-# With livox
-roslaunch strelka_ros a1_livox.launch 
-
-# Without livox
-roslaunch strelka_ros a1_normal.launch
-
-# Livox can have custom pitch value
-roslaunch strelka_ros a1_livox.launch livox_pitch:=0.9
-
-# Custom worlds can also be used
-roslaunch strelka_ros [a1_normal|a1_livox].launch wname:=[empty|stairs|bumpy_terrain ...]
+roslaunch strelka_ros a1_simulation.launch.launch lidar:=[true|false] lidar_pitch:=0.8 wname:=[empty|stairs|bumpy_terrain ...]
 ```
 ### Run everything in one go ...
 ```
