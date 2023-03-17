@@ -1,6 +1,8 @@
 # ROS support for strelka library
-A package to provide plug-in for [Livox Series LiDAR](https://www.livoxtech.com).
-***
+- Gazebo launch files for UnitreeA1 robot
+- Livox mid-70 robot mount
+- Foothold selection algorithms implemented using [grid_map](https://github.com/ANYbotics/grid_map)
+
 ## Requirements
 - Ubuntu(=18.04,20.04)
 - ROS(=Melodic,Noetic)
@@ -10,10 +12,7 @@ A package to provide plug-in for [Livox Series LiDAR](https://www.livoxtech.com)
 - [strelka](https://github.com/RumblingTurtle/strelka) library 
 - [grid_map](https://github.com/ANYbotics/grid_map)
 
-***
-
 ## Usage
-
 ### Start simulation
 ```
 roslaunch strelka_ros a1_simulation.launch.launch lidar:=[true|false] lidar_pitch:=0.8 wname:=[empty|stairs|bumpy_terrain ...]
@@ -40,7 +39,7 @@ roslaunch strelka_ros a1_local_planner.launch blind:=true/false
 ```
 roslaunch strelka_ros a1_high_command_publisher.launch
 ```
-***
+
 ## Edit control parameters using yaml config
 ```
 #config/a1_full_pipeline.yaml
@@ -51,6 +50,6 @@ roslaunch strelka_ros a1_high_command_publisher.launch
     bodyHeight: 0.26 
     gait: [trot|stand|flytrot|step|pronk]
 ```
-***
+
 ## Livox mid-70 mount
 ![](resources/livox.gif)
