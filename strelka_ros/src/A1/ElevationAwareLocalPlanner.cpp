@@ -26,9 +26,14 @@ int main(int argc, char **argv) {
   ros::init(argc, argv, "a1_local_planner");
 
   ros::NodeHandle nh;
-
+  std::string gaitName;
+  nh.param<std::string>("gait", gaitName, "trot");
+  if (strelka::GAITS_MAP.count(gaitName) == 0) {
+    ROS_INFO_STREAM("A1LocalPlanner: Can't find gait named " << gaitName);
+    return 1;
+  }
   std::shared_ptr<GaitScheduler> gaitScheduler =
-      std::make_shared<GaitScheduler>(strelka::GAITS::TROT);
+      std::make_shared<GaitScheduler>(strelka::GAITS_MAP.at(gaitName));
 
   std::shared_ptr<ElevationAwareFootPlanner> footPlanner =
       std::make_shared<ElevationAwareFootPlanner>(gaitScheduler, 0.15, nh);

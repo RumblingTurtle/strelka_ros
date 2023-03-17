@@ -59,6 +59,7 @@ roslaunch strelka_ros a1_high_command_publisher.launch
     velocityYaw: 0.0 
     footHeight: 0.08 
     bodyHeight: 0.26 
+    gait: [trot|stand|flytrot|step|pronk]
 ```
 ***
 ## Livox mid-70 mount
