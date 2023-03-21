@@ -4,5 +4,10 @@ velocityY: 0.0
 velocityYaw: 0.0
 footHeight: 0.12 
 bodyHeight: 0.27 
+
 foothold_search_radius: 0.1
+
+mpc_step_dt: 0.02
+mpc_horizon_steps: 15 
+
 gait: trot

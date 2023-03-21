@@ -52,11 +52,14 @@ roslaunch strelka_ros a1_high_command_publisher.launch
 ## Edit control parameters using yaml config
 ```
 #config/a1_full_pipeline.yaml
-    velocityX: 0.2
-    velocityY: 0.0
-    velocityYaw: 0.0 
-    footHeight: 0.08 
-    bodyHeight: 0.26 
-    foothold_search_radius: 0.1 #Search radius for foothold adaptation. Not used in blind mode
-    gait: [trot|stand|flytrot|step|pronk]
+velocityX: 0.15
+velocityY: 0.0
+velocityYaw: 0.0
+footHeight: 0.12 
+bodyHeight: 0.27 
+
+foothold_search_radius: 0.1 #Search radius for foothold adaptation. Not used in blind mode
+
+mpc_step_dt: 0.02
+mpc_horizon_steps: 15 
 ```
