@@ -59,10 +59,11 @@ ${catkin_LIBRARIES}
 lcm
 )
 
-add_executable(a1_local_planner src/A1/LocalPlanner.cpp)
+add_executable(a1_local_planner src/A1/LocalPlanner.cpp src/A1/ElevationAwareFootPlanner.cpp)
 
 target_link_libraries(a1_local_planner
 ${catkin_LIBRARIES}
+strelka
 strelka_robots
 lcm
 )
@@ -79,15 +80,6 @@ add_executable(a1_wbic src/A1/WBIC.cpp)
 
 target_link_libraries(a1_wbic
 ${catkin_LIBRARIES}
-strelka_robots
-lcm
-)
-
-add_executable(a1_elevation_aware_local_planner src/A1/ElevationAwareFootPlanner.cpp src/A1/ElevationAwareLocalPlanner.cpp)
-
-target_link_libraries(a1_elevation_aware_local_planner
-${catkin_LIBRARIES}
-strelka
 strelka_robots
 lcm
 )
