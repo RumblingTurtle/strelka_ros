@@ -16,6 +16,11 @@
 - [strelka](https://github.com/RumblingTurtle/strelka) library 
 - [grid_map](https://github.com/ANYbotics/grid_map)
 
+## Installation
+Make sure to build your catkin workspace with optimizations. They greatly improve both elevation_mapping and foothold adaptation speeds.
+```
+catkin build -DCMAKE_BUILD_TYPE=Release
+```
 ## Usage
 ### Start simulation
 ```
@@ -52,5 +57,6 @@ roslaunch strelka_ros a1_high_command_publisher.launch
     velocityYaw: 0.0 
     footHeight: 0.08 
     bodyHeight: 0.26 
+    foothold_search_radius: 0.1 #Search radius for foothold adaptation. Not used in blind mode
     gait: [trot|stand|flytrot|step|pronk]
 ```

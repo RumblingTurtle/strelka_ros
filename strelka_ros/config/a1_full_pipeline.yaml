@@ -4,4 +4,5 @@ velocityY: 0.0
 velocityYaw: 0.0
 footHeight: 0.12 
 bodyHeight: 0.27 
+foothold_search_radius: 0.1
 gait: trot

@@ -6,6 +6,7 @@
 #include <grid_map_ros/grid_map_ros.hpp>
 #include <ros/ros.h>
 
+#include <strelka_ros/A1/RvizVisualizer.hpp>
 #include <strelka_ros/ElevationAwareFootPlanner.hpp>
 
 #include <strelka_messages/HighLevelCommand.hpp>
@@ -27,12 +28,14 @@ int main(int argc, char **argv) {
 
   ros::NodeHandle nh;
 
-  std::unique_ptr<A1LocalPlanner> planner;
+  std::shared_ptr<A1LocalPlanner> planner;
   std::string gaitName;
+  float searchRadius;
   bool blind;
 
   nh.param<std::string>("gait", gaitName, "trot");
   nh.param<bool>("blind", blind, true);
+  nh.param<float>("foothold_search_radius", searchRadius, 0.1);
 
   if (strelka::GAITS_MAP.count(gaitName) == 0) {
     ROS_ERROR_STREAM("A1LocalPlanner: Can't find gait named " << gaitName);
@@ -40,20 +43,24 @@ int main(int argc, char **argv) {
   }
 
   if (blind) {
-    planner = std::make_unique<A1LocalPlanner>(strelka::GAITS_MAP.at(gaitName));
+    planner = std::make_shared<A1LocalPlanner>(strelka::GAITS_MAP.at(gaitName));
   } else {
     std::shared_ptr<GaitScheduler> gaitScheduler =
         std::make_shared<GaitScheduler>(strelka::GAITS_MAP.at(gaitName));
 
     std::shared_ptr<ElevationAwareFootPlanner> footPlanner =
-        std::make_shared<ElevationAwareFootPlanner>(gaitScheduler, 0.15, nh);
+        std::make_shared<ElevationAwareFootPlanner>(gaitScheduler, searchRadius,
+                                                    nh);
 
-    planner = std::make_unique<A1LocalPlanner>(footPlanner);
+    planner = std::make_shared<A1LocalPlanner>(footPlanner);
   }
+
+  RvizVisualizer visualizer{nh};
 
   while (ros::ok()) {
     ros::spinOnce();
     planner->handle();
+    visualizer.publishLocalPlannerInfo(planner);
   };
 
   return 0;
