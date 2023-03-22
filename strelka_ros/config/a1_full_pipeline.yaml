@@ -1,12 +1,15 @@
 velocityX: 0.15
 velocityY: 0.0
 velocityYaw: 0.0
-footHeight: 0.12 
-bodyHeight: 0.27 
+footHeight: 0.08 
+bodyHeight: 0.26 
 
 foothold_search_radius: 0.1
 
 mpc_step_dt: 0.02
-mpc_horizon_steps: 15 
+mpc_horizon_steps: 15
+
+height_lpf_freq: 30.0
+pitch_lpf_freq: 10.0
 
 gait: trot

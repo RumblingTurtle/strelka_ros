@@ -47,12 +47,12 @@ int main(int argc, char **argv) {
   strelka_lcm_headers::HighLevelCommand highCommandMsg{
       .linearSpeed = {velocityX, velocityY, 0.0},
       .angularVelocity = {0, 0, velocityYaw},
-      .footHeight = 0.08,
+      .footHeight = footHeight,
       .footClearance = 0.002,
       .hipOffsets = {0, 0},
       .rpy = {0, 0, 0},
       .comOffset = {0, 0},
-      .bodyHeight = 0.26,
+      .bodyHeight = bodyHeight,
       .stop = false};
 
   setupKeyboardInterrupt();

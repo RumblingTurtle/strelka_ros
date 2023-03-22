@@ -58,8 +58,15 @@ velocityYaw: 0.0
 footHeight: 0.12 
 bodyHeight: 0.27 
 
-foothold_search_radius: 0.1 #Search radius for foothold adaptation. Not used in blind mode
+#Search radius for foothold adaptation. Not used in blind mode
+foothold_search_radius: 0.1
 
 mpc_step_dt: 0.02
-mpc_horizon_steps: 15 
+mpc_horizon_steps: 15
+
+# Frequency settings for body trajectory planner's lowpass filters
+height_lpf_freq: 30.0
+pitch_lpf_freq: 10.0
+
+gait: trot
 ```
