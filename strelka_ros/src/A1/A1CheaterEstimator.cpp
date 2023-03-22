@@ -132,9 +132,7 @@ int main(int argc, char **argv) {
   using namespace strelka::interfaces;
   using namespace strelka::robots;
 
-  MoveToInterface<UnitreeA1> interface {
-    UnitreeA1::createDummyA1RobotWithRawState()
-  };
+  MoveToInterface<UnitreeA1> interface {};
   interface.moveToInit();
 
   std_srvs::Empty resetObj;

@@ -12,11 +12,7 @@ int main(int argc, char **argv) {
   using namespace strelka::state_estimation;
   using namespace strelka::robots;
 
-  UnitreeA1 dummyRobot = UnitreeA1::createDummyA1RobotWithRawState();
-
-  MoveToInterface<UnitreeA1> interface {
-    dummyRobot
-  };
+  MoveToInterface<UnitreeA1> interface {};
 
   interface.moveToInit();
 

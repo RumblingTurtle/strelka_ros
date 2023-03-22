@@ -7,8 +7,7 @@ int main(int argc, char **argv) {
   using namespace strelka;
   using namespace strelka::control;
 
-  WBICNode<robots::UnitreeA1> wbicController{
-      robots::UnitreeA1::createDummyA1RobotWithRawState(), DEFAULT_WBIC_PARAMS};
+  WBICNode<robots::UnitreeA1> wbicController{};
   while (wbicController.handle() && ros::ok()) {
   }
   return 0;

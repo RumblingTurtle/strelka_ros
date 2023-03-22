@@ -30,7 +30,6 @@ int main(int argc, char **argv) {
 
   ros::NodeHandle nh;
 
-  UnitreeA1 dummyRobot = UnitreeA1::createDummyA1RobotWithRawState();
   std::shared_ptr<LocalPlannerNode<UnitreeA1>> planner;
   std::string gaitName;
   float searchRadius, stepDt, heightFreq, pitchFreq;
@@ -54,8 +53,7 @@ int main(int argc, char **argv) {
 
   if (blind) {
     planner = std::make_shared<LocalPlannerNode<UnitreeA1>>(
-        strelka::GAITS_MAP.at(gaitName), dummyRobot.robotMass(),
-        dummyRobot.rotationalInertia(), stepDt, horizonSteps, heightFreq,
+        strelka::GAITS_MAP.at(gaitName), stepDt, horizonSteps, heightFreq,
         pitchFreq);
   } else {
     std::shared_ptr<GaitScheduler> gaitScheduler =
@@ -66,8 +64,7 @@ int main(int argc, char **argv) {
                                                     nh);
 
     planner = std::make_shared<LocalPlannerNode<UnitreeA1>>(
-        footPlanner, dummyRobot.robotMass(), dummyRobot.rotationalInertia(),
-        stepDt, horizonSteps, heightFreq, pitchFreq);
+        footPlanner, stepDt, horizonSteps, heightFreq, pitchFreq);
   }
 
   RvizVisualizer visualizer{nh};
