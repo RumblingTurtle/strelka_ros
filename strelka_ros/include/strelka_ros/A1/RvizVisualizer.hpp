@@ -2,7 +2,7 @@
 #include "visualization_msgs/MarkerArray.h"
 #include <memory>
 #include <ros/ros.h>
-#include <strelka_robots/A1/control/A1LocalPlanner.hpp>
+#include <strelka/nodes/LocalPlannerNode.hpp>
 
 class RvizVisualizer {
   ros::Publisher markerPub;
@@ -16,7 +16,10 @@ public:
   }
 
   void publishLocalPlannerInfo(
-      std::shared_ptr<strelka::control::A1LocalPlanner> plannerPtr) {
+      std::shared_ptr<
+          strelka::control::LocalPlannerNode<strelka::robots::UnitreeA1>>
+          plannerPtr) {
+
     using namespace strelka::control;
     visualization_msgs::MarkerArray markers;
     markerId = 0;

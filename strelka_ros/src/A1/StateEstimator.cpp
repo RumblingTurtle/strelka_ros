@@ -1,5 +1,5 @@
-#include <strelka_robots/A1/interfaces/A1GazeboInterface.hpp>
-#include <strelka_robots/A1/state_estimation/A1StateEstimator.hpp>
+#include <strelka/nodes/MoveToInterface.hpp>
+#include <strelka/nodes/StateEstimatorNode.hpp>
 
 #include <ros/ros.h>
 #include <std_srvs/Empty.h>
@@ -10,8 +10,14 @@ int main(int argc, char **argv) {
 
   using namespace strelka::interfaces;
   using namespace strelka::state_estimation;
+  using namespace strelka::robots;
 
-  A1GazeboInterface interface;
+  UnitreeA1 dummyRobot = UnitreeA1::createDummyA1RobotWithRawState();
+
+  MoveToInterface<UnitreeA1> interface {
+    dummyRobot
+  };
+
   interface.moveToInit();
 
   std_srvs::Empty resetObj;
@@ -21,7 +27,7 @@ int main(int argc, char **argv) {
 
   interface.moveToStand();
 
-  A1StateEstimator estimator{};
+  StateEstimatorNode<UnitreeA1> estimator{};
 
   while (estimator.handle() && ros::ok()) {
   }

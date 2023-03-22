@@ -1,4 +1,4 @@
-#include <strelka_ros/A1/TransformPublisher.hpp>
+#include <strelka_ros/TransformPublisher.hpp>
 
 int main(int argc, char **argv) {
   ros::init(argc, argv, "a1_transform_publisher");
@@ -9,9 +9,8 @@ int main(int argc, char **argv) {
     return 1;
 
   Handler handler(nh);
-  lcm::Subscription *sub =
-      lcm.subscribe(strelka::A1::constants::ROBOT_STATE_TOPIC_NAME,
-                    &Handler::handle, &handler);
+  lcm::Subscription *sub = lcm.subscribe(
+      strelka::constants::ROBOT_STATE_TOPIC_NAME, &Handler::handle, &handler);
 
   while (0 == lcm.handle() && ros::ok()) {
   };

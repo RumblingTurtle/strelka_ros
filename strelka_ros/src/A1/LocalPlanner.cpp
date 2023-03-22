@@ -9,45 +9,54 @@
 #include <strelka_ros/A1/RvizVisualizer.hpp>
 #include <strelka_ros/ElevationAwareFootPlanner.hpp>
 
+#include <strelka_lcm_headers/WbicCommand.hpp>
 #include <strelka_messages/HighLevelCommand.hpp>
-#include <strelka_messages/a1_lcm_msgs/WbicCommand.hpp>
 
-#include <strelka_robots/A1/UnitreeA1.hpp>
-#include <strelka_robots/A1/constants.hpp>
+#include <strelka/robots/A1/UnitreeA1.hpp>
+#include <strelka/robots/A1/constants.hpp>
 
 #include <strelka/common/macros.hpp>
 #include <strelka/common/typedefs.hpp>
-#include <strelka_robots/A1/control/A1LocalPlanner.hpp>
+#include <strelka/nodes/LocalPlannerNode.hpp>
 
 using namespace strelka;
 using namespace strelka::control;
 
 int main(int argc, char **argv) {
   using namespace strelka::control;
+  using namespace strelka::robots;
+
   ros::init(argc, argv, "a1_local_planner");
 
   ros::NodeHandle nh;
 
-  std::shared_ptr<A1LocalPlanner> planner;
+  UnitreeA1 dummyRobot = UnitreeA1::createDummyA1RobotWithRawState();
+  std::shared_ptr<LocalPlannerNode<UnitreeA1>> planner;
   std::string gaitName;
-  float searchRadius, stepDt;
+  float searchRadius, stepDt, heightFreq, pitchFreq;
   int horizonSteps;
   bool blind;
 
   nh.param<std::string>("gait", gaitName, "trot");
   nh.param<bool>("blind", blind, true);
   nh.param<float>("foothold_search_radius", searchRadius, 0.1);
+
   nh.param<float>("mpc_step_dt", stepDt, 0.02);
   nh.param<int>("mpc_horizon_steps", horizonSteps, 15);
 
+  nh.param<float>("height_lpf_freq", heightFreq, 30.0);
+  nh.param<float>("pitch_lpf_freq", pitchFreq, 10.0);
+
   if (strelka::GAITS_MAP.count(gaitName) == 0) {
-    ROS_ERROR_STREAM("A1LocalPlanner: Can't find gait named " << gaitName);
+    ROS_ERROR_STREAM("LocalPlannerNode: Can't find gait named " << gaitName);
     return 1;
   }
 
   if (blind) {
-    planner = std::make_shared<A1LocalPlanner>(strelka::GAITS_MAP.at(gaitName),
-                                               stepDt, horizonSteps);
+    planner = std::make_shared<LocalPlannerNode<UnitreeA1>>(
+        strelka::GAITS_MAP.at(gaitName), dummyRobot.robotMass(),
+        dummyRobot.rotationalInertia(), stepDt, horizonSteps, heightFreq,
+        pitchFreq);
   } else {
     std::shared_ptr<GaitScheduler> gaitScheduler =
         std::make_shared<GaitScheduler>(strelka::GAITS_MAP.at(gaitName));
@@ -56,8 +65,9 @@ int main(int argc, char **argv) {
         std::make_shared<ElevationAwareFootPlanner>(gaitScheduler, searchRadius,
                                                     nh);
 
-    planner =
-        std::make_shared<A1LocalPlanner>(footPlanner, stepDt, horizonSteps);
+    planner = std::make_shared<LocalPlannerNode<UnitreeA1>>(
+        footPlanner, dummyRobot.robotMass(), dummyRobot.rotationalInertia(),
+        stepDt, horizonSteps, heightFreq, pitchFreq);
   }
 
   RvizVisualizer visualizer{nh};

@@ -8,7 +8,6 @@
 
 #include <strelka/control/FootholdPlanner.hpp>
 #include <strelka/control/gait/GaitScheduler.hpp>
-#include <strelka_robots/A1/kinematics.hpp>
 
 using namespace grid_map;
 using namespace strelka;

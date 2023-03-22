@@ -1,10 +1,13 @@
-#include <geometry_msgs/PoseWithCovarianceStamped.h>
+
 #include <iostream>
 #include <lcm/lcm-cpp.hpp>
+
+#include <strelka/common/constants.hpp>
+#include <strelka_lcm_headers/RobotState.hpp>
+
+#include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <nav_msgs/Odometry.h>
 #include <ros/ros.h>
-#include <strelka_messages/a1_lcm_msgs/RobotState.hpp>
-#include <strelka_robots/A1/constants.hpp>
 #include <tf/transform_broadcaster.h>
 
 class Handler {
@@ -16,7 +19,7 @@ public:
   Handler(ros::NodeHandle n) : nh(n) { lastTransformStamp = ros::Time::now(); }
 
   void handle(const lcm::ReceiveBuffer *rbuf, const std::string &chan,
-              const a1_lcm_msgs::RobotState *data) {
+              const strelka_lcm_headers::RobotState *data) {
 
     static tf::TransformBroadcaster br;
 

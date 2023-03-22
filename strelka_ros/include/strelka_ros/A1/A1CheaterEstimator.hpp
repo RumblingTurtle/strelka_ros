@@ -5,17 +5,17 @@
 #include <lcm/lcm-cpp.hpp>
 #include <strelka/common/constants.hpp>
 #include <strelka/common/rotation.hpp>
-#include <strelka_messages/a1_lcm_msgs/RobotGazeboState.hpp>
-#include <strelka_messages/a1_lcm_msgs/RobotRawState.hpp>
-#include <strelka_messages/a1_lcm_msgs/RobotState.hpp>
-#include <strelka_robots/A1/UnitreeA1.hpp>
-#include <strelka_robots/A1/constants.hpp>
-#include <strelka_robots/A1/kinematics.hpp>
+#include <strelka/robots/A1/UnitreeA1.hpp>
+#include <strelka/robots/A1/constants.hpp>
+#include <strelka/robots/A1/kinematics.hpp>
+#include <strelka_lcm_headers/RobotGazeboState.hpp>
+#include <strelka_lcm_headers/RobotRawState.hpp>
+#include <strelka_lcm_headers/RobotState.hpp>
 
 class A1CheaterEstimator {
   lcm::LCM lcm;
-  a1_lcm_msgs::RobotState *robotStateMsg;
-  a1_lcm_msgs::RobotGazeboState *robotGazeboMsg;
+  strelka_lcm_headers::RobotState *robotStateMsg;
+  strelka_lcm_headers::RobotGazeboState *robotGazeboMsg;
 
   lcm::Subscription *subRawState;
   lcm::Subscription *subGazebo;
@@ -24,12 +24,13 @@ class A1CheaterEstimator {
   bool gazeboStateRecieved;
 
   void update(const lcm::ReceiveBuffer *rbuf, const std::string &chan,
-              const a1_lcm_msgs::RobotRawState *messageIn);
+              const strelka_lcm_headers::RobotRawState *messageIn);
   void updateGazebo(const lcm::ReceiveBuffer *rbuf, const std::string &chan,
-                    const a1_lcm_msgs::RobotGazeboState *messageIn);
+                    const strelka_lcm_headers::RobotGazeboState *messageIn);
 
-  void propagateRobotRawState(const a1_lcm_msgs::RobotRawState *messageIn,
-                              a1_lcm_msgs::RobotState *messageOut);
+  void
+  propagateRobotRawState(const strelka_lcm_headers::RobotRawState *messageIn,
+                         strelka_lcm_headers::RobotState *messageOut);
 
 public:
   A1CheaterEstimator();

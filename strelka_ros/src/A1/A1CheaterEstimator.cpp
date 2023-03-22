@@ -2,17 +2,17 @@
 
 #include <ros/ros.h>
 #include <std_srvs/Empty.h>
-#include <strelka_robots/A1/interfaces/A1GazeboInterface.hpp>
+#include <strelka/nodes/MoveToInterface.hpp>
 #include <tf/transform_listener.h>
 
 A1CheaterEstimator::A1CheaterEstimator()
     : gazeboStateRecieved(false), trunkToFootZOffset(0) {
-  robotStateMsg = new a1_lcm_msgs::RobotState();
-  robotGazeboMsg = new a1_lcm_msgs::RobotGazeboState();
+  robotStateMsg = new strelka_lcm_headers::RobotState();
+  robotGazeboMsg = new strelka_lcm_headers::RobotGazeboState();
   zeroOffset = Vec3<float>::Zero();
-  subGazebo = lcm.subscribe(strelka::A1::constants::GAZEBO_STATE_TOPIC_NAME,
+  subGazebo = lcm.subscribe(strelka::constants::GAZEBO_STATE_TOPIC_NAME,
                             &A1CheaterEstimator::updateGazebo, this);
-  subRawState = lcm.subscribe(strelka::A1::constants::RAW_STATE_TOPIC_NAME,
+  subRawState = lcm.subscribe(strelka::constants::RAW_STATE_TOPIC_NAME,
                               &A1CheaterEstimator::update, this);
   subGazebo->setQueueCapacity(1);
   subRawState->setQueueCapacity(1);
@@ -67,8 +67,8 @@ A1CheaterEstimator::~A1CheaterEstimator() {
 }
 
 void A1CheaterEstimator::propagateRobotRawState(
-    const a1_lcm_msgs::RobotRawState *messageIn,
-    a1_lcm_msgs::RobotState *messageOut) {
+    const strelka_lcm_headers::RobotRawState *messageIn,
+    strelka_lcm_headers::RobotState *messageOut) {
   memcpy(messageOut->quaternion, messageIn->quaternion, sizeof(float) * 4);
   memcpy(messageOut->gyro, messageIn->gyro, sizeof(float) * 3);
   memcpy(messageOut->accel, messageIn->accel, sizeof(float) * 3);
@@ -80,8 +80,9 @@ void A1CheaterEstimator::propagateRobotRawState(
 
 void A1CheaterEstimator::updateGazebo(
     const lcm::ReceiveBuffer *rbuf, const std::string &chan,
-    const a1_lcm_msgs::RobotGazeboState *messageIn) {
-  memcpy(robotGazeboMsg, messageIn, sizeof(a1_lcm_msgs::RobotGazeboState));
+    const strelka_lcm_headers::RobotGazeboState *messageIn) {
+  memcpy(robotGazeboMsg, messageIn,
+         sizeof(strelka_lcm_headers::RobotGazeboState));
   if (!gazeboStateRecieved) {
     gazeboStateRecieved = true;
     zeroOffset = Eigen::Map<const Vec3<float>>(messageIn->position_world, 3);
@@ -90,9 +91,9 @@ void A1CheaterEstimator::updateGazebo(
   }
 }
 
-void A1CheaterEstimator::update(const lcm::ReceiveBuffer *rbuf,
-                                const std::string &chan,
-                                const a1_lcm_msgs::RobotRawState *messageIn) {
+void A1CheaterEstimator::update(
+    const lcm::ReceiveBuffer *rbuf, const std::string &chan,
+    const strelka_lcm_headers::RobotRawState *messageIn) {
   if (!gazeboStateRecieved) {
     return;
   }
@@ -122,14 +123,18 @@ void A1CheaterEstimator::update(const lcm::ReceiveBuffer *rbuf,
   memcpy(robotStateMsg->jacobians, robot.footJacobians().data(),
          sizeof(float) * 36);
 
-  lcm.publish(strelka::A1::constants::ROBOT_STATE_TOPIC_NAME, robotStateMsg);
+  lcm.publish(strelka::constants::ROBOT_STATE_TOPIC_NAME, robotStateMsg);
 }
 
 int main(int argc, char **argv) {
   ros::init(argc, argv, "a1_state_estimator");
   ros::NodeHandle nh;
+  using namespace strelka::interfaces;
+  using namespace strelka::robots;
 
-  strelka::interfaces::A1GazeboInterface interface;
+  MoveToInterface<UnitreeA1> interface {
+    UnitreeA1::createDummyA1RobotWithRawState()
+  };
   interface.moveToInit();
 
   std_srvs::Empty resetObj;

@@ -1,22 +1,27 @@
-#include <gazebo_msgs/ModelStates.h>
-#include <geometry_msgs/WrenchStamped.h>
-#include <lcm/lcm-cpp.hpp>
 #include <math.h>
-#include <nav_msgs/Odometry.h>
-#include <ros/ros.h>
-#include <sensor_msgs/Imu.h>
-#include <std_msgs/Bool.h>
-#include <strelka_messages/a1_lcm_msgs/RobotGazeboState.hpp>
-#include <strelka_messages/a1_lcm_msgs/RobotLowCommand.hpp>
-#include <strelka_messages/a1_lcm_msgs/RobotRawState.hpp>
-#include <strelka_robots/A1/constants.hpp>
 #include <string>
 #include <thread>
+#include <vector>
+
+#include <lcm/lcm-cpp.hpp>
+
+#include <ros/ros.h>
+
+#include <gazebo_msgs/ModelStates.h>
+#include <geometry_msgs/WrenchStamped.h>
+#include <nav_msgs/Odometry.h>
+#include <sensor_msgs/Imu.h>
+#include <std_msgs/Bool.h>
+
+#include <strelka/common/constants.hpp>
+#include <strelka_lcm_headers/RobotGazeboState.hpp>
+#include <strelka_lcm_headers/RobotLowCommand.hpp>
+#include <strelka_lcm_headers/RobotRawState.hpp>
+
 #include <unitree_legged_msgs/LowCmd.h>
 #include <unitree_legged_msgs/LowState.h>
 #include <unitree_legged_msgs/MotorCmd.h>
 #include <unitree_legged_msgs/MotorState.h>
-#include <vector>
 
 static const std::vector<std::string> legInitials = {"FR", "FL", "RR", "RL"};
 
@@ -31,8 +36,8 @@ class LcmHandler {
   ros::Time init_time;
 
 public:
-  a1_lcm_msgs::RobotRawState state;
-  a1_lcm_msgs::RobotGazeboState gaz_state;
+  strelka_lcm_headers::RobotRawState state;
+  strelka_lcm_headers::RobotGazeboState gaz_state;
   bool runThread = true;
   lcm::LCM lcm;
   LcmHandler(const char *rname) : robot_name(rname) {
@@ -175,7 +180,7 @@ public:
   }
 
   void commandCallback(const lcm::ReceiveBuffer *rbuf, const std::string &chan,
-                       const a1_lcm_msgs::RobotLowCommand *msg) {
+                       const strelka_lcm_headers::RobotLowCommand *msg) {
     unitree_legged_msgs::MotorCmd motor_cmd;
     for (int motorId = 0; motorId < 12; motorId++) {
       motor_cmd.mode = 0x0A;

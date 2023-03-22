@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
   ros::Rate loop_rate(1000);
 
   while (ros::ok()) {
-    listen_publish_obj.lcm.publish(strelka::A1::constants::RAW_STATE_TOPIC_NAME,
+    listen_publish_obj.lcm.publish(strelka::constants::RAW_STATE_TOPIC_NAME,
                                    &(listen_publish_obj.state));
     loop_rate.sleep();
   }
