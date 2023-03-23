@@ -9,7 +9,12 @@ foothold_search_radius: 0.1
 mpc_step_dt: 0.02
 mpc_horizon_steps: 15
 
+# Stairs
 height_lpf_freq: 30.0
 pitch_lpf_freq: 10.0
+
+# Sparse stepping stones
+#height_lpf_freq: 0.9
+#pitch_lpf_freq: 0.9
 
 gait: trot
