@@ -22,12 +22,8 @@ Vec3<float> ElevationAwareFootPlanner::adjustFoothold(
     const Vec3<float> &currentRobotPosition,
     const Mat3<float> &currentRobotRotation, int legId, robots::Robot &robot) {
   if (!firstMapRecieved) {
-    if (updateFootholdsContinuously) {
-      return prevAdjustedFoothold.col(legId);
-    } else {
-      return Vec3<float>{nominalFootPosition(0), nominalFootPosition(1),
-                         getFoothold(legId, 0)(2)};
-    }
+    return Vec3<float>{nominalFootPosition(0), nominalFootPosition(1),
+                       getFoothold(legId, 0)(2)};
   }
 
   Position nominalPositionCenter =
