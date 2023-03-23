@@ -23,7 +23,9 @@ public:
   void setMap(const grid_map_msgs::GridMap &newMap);
 
   ElevationAwareFootPlanner(std::shared_ptr<GaitScheduler> scheduler,
-                            float searchRadius, ros::NodeHandle &nh);
+                            float searchRadius,
+                            bool updateFootholdsContinuously,
+                            ros::NodeHandle &nh);
 
   Vec3<float> adjustFoothold(const Vec3<float> &nominalFootPosition,
                              const Vec3<float> &currentRobotPosition,

@@ -68,5 +68,8 @@ mpc_horizon_steps: 15
 height_lpf_freq: 30.0
 pitch_lpf_freq: 10.0
 
+# Update footholds during the whole swing phase
+upd_footholds_continuously: true
+
 gait: trot
 ```

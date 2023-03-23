@@ -34,10 +34,11 @@ int main(int argc, char **argv) {
   std::string gaitName;
   float searchRadius, stepDt, heightFreq, pitchFreq;
   int horizonSteps;
-  bool blind;
+  bool blind, contFootUpdate;
 
   nh.param<std::string>("gait", gaitName, "trot");
   nh.param<bool>("blind", blind, true);
+  nh.param<bool>("upd_footholds_continuously", contFootUpdate, false);
   nh.param<float>("foothold_search_radius", searchRadius, 0.1);
 
   nh.param<float>("mpc_step_dt", stepDt, 0.02);
@@ -54,14 +55,14 @@ int main(int argc, char **argv) {
   if (blind) {
     planner = std::make_shared<LocalPlannerNode<UnitreeA1>>(
         strelka::GAITS_MAP.at(gaitName), stepDt, horizonSteps, heightFreq,
-        pitchFreq);
+        pitchFreq, contFootUpdate);
   } else {
     std::shared_ptr<GaitScheduler> gaitScheduler =
         std::make_shared<GaitScheduler>(strelka::GAITS_MAP.at(gaitName));
 
     std::shared_ptr<ElevationAwareFootPlanner> footPlanner =
         std::make_shared<ElevationAwareFootPlanner>(gaitScheduler, searchRadius,
-                                                    nh);
+                                                    contFootUpdate, nh);
 
     planner = std::make_shared<LocalPlannerNode<UnitreeA1>>(
         footPlanner, stepDt, horizonSteps, heightFreq, pitchFreq);

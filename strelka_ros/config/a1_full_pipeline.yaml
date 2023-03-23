@@ -1,4 +1,4 @@
-velocityX: 0.15
+velocityX: 0.5
 velocityY: 0.0
 velocityYaw: 0.0
 footHeight: 0.08 
@@ -16,5 +16,8 @@ pitch_lpf_freq: 10.0
 # Sparse stepping stones
 #height_lpf_freq: 0.9
 #pitch_lpf_freq: 0.9
+
+# Update footholds during the whole swing phase
+upd_footholds_continuously: true
 
 gait: trot

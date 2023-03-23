@@ -2,9 +2,9 @@
 
 ElevationAwareFootPlanner::ElevationAwareFootPlanner(
     std::shared_ptr<GaitScheduler> scheduler, float searchRadius,
-    ros::NodeHandle &nh)
-    : FootholdPlanner(scheduler), _searchRadius(searchRadius),
-      firstMapRecieved(false) {
+    bool updateFootholdsContinuously, ros::NodeHandle &nh)
+    : FootholdPlanner(scheduler, updateFootholdsContinuously),
+      _searchRadius(searchRadius), firstMapRecieved(false) {
   assert(searchRadius > 0);
   mapSub = nh.subscribe("/elevation_mapping/elevation_map_raw", 1,
                         &ElevationAwareFootPlanner::setMap, this);
@@ -22,8 +22,12 @@ Vec3<float> ElevationAwareFootPlanner::adjustFoothold(
     const Vec3<float> &currentRobotPosition,
     const Mat3<float> &currentRobotRotation, int legId, robots::Robot &robot) {
   if (!firstMapRecieved) {
-    return Vec3<float>{nominalFootPosition(0), nominalFootPosition(1),
-                       getFoothold(legId, 0)(2)};
+    if (updateFootholdsContinuously) {
+      return prevAdjustedFoothold.col(legId);
+    } else {
+      return Vec3<float>{nominalFootPosition(0), nominalFootPosition(1),
+                         getFoothold(legId, 0)(2)};
+    }
   }
 
   Position nominalPositionCenter =
@@ -38,8 +42,12 @@ Vec3<float> ElevationAwareFootPlanner::adjustFoothold(
   } catch (const std::out_of_range &ex) {
     ROS_INFO_STREAM("Failed to get elevation at" << nominalPositionCenter);
     ROS_INFO_STREAM(ex.what());
-    return Vec3<float>{nominalFootPosition(0), nominalFootPosition(1),
-                       getFoothold(legId, 0)(2)};
+    if (updateFootholdsContinuously) {
+      return prevAdjustedFoothold.col(legId);
+    } else {
+      return Vec3<float>{nominalFootPosition(0), nominalFootPosition(1),
+                         getFoothold(legId, 0)(2)};
+    }
   }
 
   Index nominalPosIndex;
@@ -67,7 +75,12 @@ Vec3<float> ElevationAwareFootPlanner::adjustFoothold(
   }
 
   if (std::isnan(bestScore)) {
-    return nominalFootPositionWorld;
+    if (updateFootholdsContinuously) {
+      return prevAdjustedFoothold.col(legId);
+    } else {
+      return Vec3<float>{nominalFootPosition(0), nominalFootPosition(1),
+                         getFoothold(legId, 0)(2)};
+    }
   }
 
   Position3 bestPosition;
