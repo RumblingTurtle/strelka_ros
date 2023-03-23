@@ -18,33 +18,36 @@ void ElevationAwareFootPlanner::setMap(const grid_map_msgs::GridMap &newMap) {
 }
 
 Vec3<float> ElevationAwareFootPlanner::adjustFoothold(
-    Vec3<float> nominalFootPosition, Vec3<float> currentRobotPosition,
-    Mat3<float> currentRobotRotation, int legId, robots::Robot &robot) {
+    const Vec3<float> &nominalFootPosition,
+    const Vec3<float> &currentRobotPosition,
+    const Mat3<float> &currentRobotRotation, int legId, robots::Robot &robot) {
   if (!firstMapRecieved) {
-    nominalFootPosition(2) = getFoothold(legId, 0)(2);
-    return nominalFootPosition;
+    return Vec3<float>{nominalFootPosition(0), nominalFootPosition(1),
+                       getFoothold(legId, 0)(2)};
   }
 
   Position nominalPositionCenter =
       nominalFootPosition.cast<double>().block<2, 1>(0, 0);
 
+  Vec3<float> nominalFootPositionWorld = nominalFootPosition;
   try {
     float nominalPosElevation =
         map.atPosition("elevation_inpainted", nominalPositionCenter) +
         robot.footRadius();
-    nominalFootPosition(2) = nominalPosElevation;
+    nominalFootPositionWorld(2) = nominalPosElevation;
   } catch (const std::out_of_range &ex) {
     ROS_INFO_STREAM("Failed to get elevation at" << nominalPositionCenter);
     ROS_INFO_STREAM(ex.what());
-    nominalFootPosition(2) = getFoothold(legId, 0)(2);
-    return nominalFootPosition;
+    return Vec3<float>{nominalFootPosition(0), nominalFootPosition(1),
+                       getFoothold(legId, 0)(2)};
   }
 
   Index nominalPosIndex;
   map.getIndex(nominalPositionCenter, nominalPosIndex);
 
-  if (!std::isnan(evalFoothold(nominalPosIndex, nominalFootPosition, legId))) {
-    return nominalFootPosition;
+  if (!std::isnan(
+          evalFoothold(nominalPosIndex, nominalFootPositionWorld, legId))) {
+    return nominalFootPositionWorld;
   }
 
   float bestScore = std::nanf("0");
@@ -52,7 +55,7 @@ Vec3<float> ElevationAwareFootPlanner::adjustFoothold(
   for (grid_map::SpiralIterator iterator(map, nominalPositionCenter,
                                          _searchRadius);
        !iterator.isPastEnd(); ++iterator) {
-    float score = evalFoothold(*iterator, nominalFootPosition, legId);
+    float score = evalFoothold(*iterator, nominalFootPositionWorld, legId);
     if (std::isnan(score)) {
       continue;
     }
@@ -64,18 +67,18 @@ Vec3<float> ElevationAwareFootPlanner::adjustFoothold(
   }
 
   if (std::isnan(bestScore)) {
-    return nominalFootPosition;
+    return nominalFootPositionWorld;
   }
 
   Position3 bestPosition;
-
   map.getPosition3("elevation_inpainted", bestIndex, bestPosition);
-  bestPosition(2) += robot.footRadius();
-  return bestPosition.cast<float>();
+
+  return bestPosition.cast<float>() +
+         Vec3<float>{0.0f, 0.0f, robot.footRadius()};
 }
 
 float ElevationAwareFootPlanner::evalFoothold(
-    const Index &index, Vec3<float> nominalPosition, int legId,
+    const Index &index, const Vec3<float> &nominalPosition, int legId,
     float maxCurvatureThreshold, float sdfThreshold,
     float heightDifferenceThreshold, float maxDistToNominal) {
 
