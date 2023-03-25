@@ -1,14 +1,24 @@
-velocityX: 0.2
-velocityY: 0.0
-velocityYaw: 0.0
-footHeight: 0.08 
-bodyHeight: 0.26 
+#---------------------
+velocity_x: 0.0
+velocity_y: 0.0
+velocity_yaw: 0.0
+foot_height: 0.08 
+body_height: 0.26 
+#---------------------
 
+#Search radius for foothold adaptation. Not used in blind mode
 foothold_search_radius: 0.1
 
+
+#---------------------
+#MPC settings
 mpc_step_dt: 0.02
 mpc_horizon_steps: 15
+#---------------------
 
+
+#---------------------
+# Frequency settings for body trajectory planner's lowpass filters
 # Stairs
 height_lpf_freq: 30.0
 pitch_lpf_freq: 10.0
@@ -16,8 +26,18 @@ pitch_lpf_freq: 10.0
 # Sparse stepping stones
 #height_lpf_freq: 0.9
 #pitch_lpf_freq: 0.9
+#---------------------
 
 # Update footholds during the whole swing phase
 upd_footholds_continuously: true
 
+# Use /cmd_vel topic provided by move_base
+use_move_base: true
+
 gait: trot
+
+# Use local planner with or without elevation_mapping
+blind: true
+
+# Use cheater odometry from simulation
+perfect_odometry: true

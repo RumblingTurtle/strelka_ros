@@ -15,6 +15,10 @@
 - [unitree_ros](https://github.com/unitreerobotics/unitree_ros)
 - [strelka](https://github.com/RumblingTurtle/strelka) library 
 - [grid_map](https://github.com/ANYbotics/grid_map)
+- [move_base](http://wiki.ros.org/move_base)
+```
+sudo apt install ros-${ROS_DISTRO}-navigation
+```
 
 ## Installation
 Make sure to build your catkin workspace with optimizations. They greatly improve both elevation_mapping and foothold adaptation speeds.
@@ -28,7 +32,7 @@ roslaunch strelka_ros a1_simulation.launch.launch lidar:=[true|false] lidar_pitc
 ```
 ### Run everything in one go ...
 ```
-roslaunch strelka_ros a1_full_pipeline.launch blind:=true/false perfect_odometry:=true/false
+roslaunch strelka_ros a1_full_pipeline.launch
 ```
 ### ... Or
 ### 1. Run low level control and state estimation
@@ -49,27 +53,4 @@ roslaunch strelka_ros a1_local_planner.launch blind:=true/false
 roslaunch strelka_ros a1_high_command_publisher.launch
 ```
 
-## Edit control parameters using yaml config
-```
-#config/a1_full_pipeline.yaml
-velocityX: 0.15
-velocityY: 0.0
-velocityYaw: 0.0
-footHeight: 0.12 
-bodyHeight: 0.27 
-
-#Search radius for foothold adaptation. Not used in blind mode
-foothold_search_radius: 0.1
-
-mpc_step_dt: 0.02
-mpc_horizon_steps: 15
-
-# Frequency settings for body trajectory planner's lowpass filters
-height_lpf_freq: 30.0
-pitch_lpf_freq: 10.0
-
-# Update footholds during the whole swing phase
-upd_footholds_continuously: true
-
-gait: trot
-```
+## [Edit control parameters using yaml config](config/a1_full_pipeline.yaml)

@@ -10,13 +10,15 @@
 #include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
 
-class Handler {
+class TransformPublisher {
   ros::Publisher poseRepublisher;
   ros::NodeHandle nh;
   ros::Time lastTransformStamp;
 
 public:
-  Handler(ros::NodeHandle n) : nh(n) { lastTransformStamp = ros::Time::now(); }
+  TransformPublisher(ros::NodeHandle n) : nh(n) {
+    lastTransformStamp = ros::Time::now();
+  }
 
   void handle(const lcm::ReceiveBuffer *rbuf, const std::string &chan,
               const strelka_lcm_headers::RobotState *data) {
@@ -33,8 +35,10 @@ public:
       tf::Quaternion q{data->quaternion[1], data->quaternion[2],
                        data->quaternion[3], data->quaternion[0]};
       transform.setRotation(q);
+      // Trunk link cannot have two parents (base and odom) that is why we have
+      // to parent base.
       br.sendTransform(tf::StampedTransform(transform, currentTransformTime,
-                                            "odom", "trunk"));
+                                            "odom", "base"));
       lastTransformStamp = currentTransformTime;
     }
   }

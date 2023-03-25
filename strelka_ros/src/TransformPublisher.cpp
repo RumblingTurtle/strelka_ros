@@ -8,9 +8,10 @@ int main(int argc, char **argv) {
   if (!lcm.good())
     return 1;
 
-  Handler handler(nh);
-  lcm::Subscription *sub = lcm.subscribe(
-      strelka::constants::ROBOT_STATE_TOPIC_NAME, &Handler::handle, &handler);
+  TransformPublisher handler(nh);
+  lcm::Subscription *sub =
+      lcm.subscribe(strelka::constants::ROBOT_STATE_TOPIC_NAME,
+                    &TransformPublisher::handle, &handler);
 
   while (0 == lcm.handle() && ros::ok()) {
   };
