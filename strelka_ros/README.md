@@ -6,6 +6,7 @@
 - Gazebo launch files for UnitreeA1 robot
 - Livox mid-70 robot mount
 - Foothold selection algorithms implemented using [grid_map](https://github.com/ANYbotics/grid_map)
+- move_base global planner
 
 ## Requirements
 - Ubuntu(=18.04,20.04)
