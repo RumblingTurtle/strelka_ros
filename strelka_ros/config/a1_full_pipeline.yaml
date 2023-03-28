@@ -6,7 +6,7 @@ use_move_base: false
 velocity_x: 0.0
 velocity_y: 0.0
 velocity_yaw: 0.0
-foot_height: 0.03 
+foot_height: 0.08 
 body_height: 0.27 
 #---------------------
 
@@ -35,7 +35,7 @@ pitch_lpf_freq: 10.0
 # Update footholds during the whole swing phase
 upd_footholds_continuously: false
 
-gait: step
+gait: trot
 
 # Use local planner with or without elevation_mapping
 blind: true

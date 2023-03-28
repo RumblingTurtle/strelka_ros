@@ -4,6 +4,7 @@
     <rosparam file="$(find strelka_ros)/config/a1_full_pipeline.yaml" />
 
     <arg name="full_yaml_file" value="$(find strelka_ros)/config/a1_full_pipeline.yaml"/>
+    <arg name="move_base_map" default="blank"/>
 
     <arg name="blind" value="$(eval 'blind:true' in open(arg('full_yaml_file'), 'r').read().replace(' ','').lower())"/>
     <arg name="perfect_odometry" value="$(eval 'perfect_odometry:true' in open(arg('full_yaml_file'), 'r').read().replace(' ','').lower())"/>
@@ -23,7 +24,9 @@
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find strelka_ros)/rviz/a1.rviz" />
 
     <group if="$(eval 'use_move_base:true' in open(arg('full_yaml_file'), 'r').read().replace(' ','').lower())">
-        <include file="$(find strelka_ros)/launch/move_base.launch"/>
+        <include file="$(find strelka_ros)/launch/move_base.launch">
+                <arg name="map_name" value="$(arg move_base_map)"/>
+        </include>
     </group>
 
     <node pkg="tf" type="static_transform_publisher" name="map_to_odom" args="0 0 0 0 0 0 /map /odom 100"/> 

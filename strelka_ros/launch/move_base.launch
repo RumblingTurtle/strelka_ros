@@ -1,6 +1,5 @@
 <launch> 
-
-  <arg name="map_name" default="navigation_course"/>
+  <arg name="map_name" default="blank"/>
 
   <node pkg="move_base" type="move_base" name="move_base" output="screen">
     <param name="controller_frequency" value="10.0"/>
