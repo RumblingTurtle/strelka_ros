@@ -1,13 +1,16 @@
 local_costmap:
-  update_frequency: 5
-  publish_frequency: 5
-  transform_tolerance: 0.4
+  global_frame: odom
+  robot_base_frame: trunk
+
+  update_frequency: 5.0
+  publish_frequency: 5.0
+  transform_tolerance: 0.3 
+
+  static_map: true  
   rolling_window: true
-  width: 3
-  height: 3
-  origin_x: -1.5
-  origin_y: -1.5
-  resolution: 0.1
-  inflation_radius: 0.6
-  #plugins:
-  #    - {name: obstacle_layer,        type: "costmap_2d::VoxelLayer"}
+  width: 10
+  height: 10
+  resolution: 0.02
+
+  obstacle_range: 5.0
+  raytrace_range: 5.5

@@ -7,6 +7,7 @@ Panels:
         - /Global Options1
         - /Status1
         - /GridMap1
+        - /Local Costmap1
       Splitter Ratio: 0.5
     Tree Height: 719
   - Class: rviz/Selection
@@ -27,7 +28,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: PointCloud2
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -173,6 +174,11 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        livox_base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         trunk:
           Alpha: 1
           Show Axes: false
@@ -233,32 +239,6 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
-    - Class: rviz/MarkerArray
-      Enabled: true
-      Marker Topic: /local_planner_markers
-      Name: MarkerArray
-      Namespaces:
-        local_planner_markers: true
-      Queue Size: 100
-      Value: true
-    - Alpha: 0.699999988079071
-      Class: rviz/Map
-      Color Scheme: map
-      Draw Behind: false
-      Enabled: true
-      Name: Map
-      Topic: /map
-      Unreliable: false
-      Use Timestamp: false
-      Value: true
-    - Class: rviz/MarkerArray
-      Enabled: true
-      Marker Topic: /local_planner_markers
-      Name: MarkerArray
-      Namespaces:
-        local_planner_markers: true
-      Queue Size: 100
-      Value: true
     - Alpha: 0.699999988079071
       Class: rviz/Map
       Color Scheme: map
@@ -271,22 +251,13 @@ Visualization Manager:
       Value: true
     - Alpha: 0.699999988079071
       Class: rviz/Map
-      Color Scheme: map
+      Color Scheme: costmap
       Draw Behind: false
       Enabled: true
       Name: Local Costmap
       Topic: /move_base/local_costmap/costmap
       Unreliable: false
       Use Timestamp: false
-      Value: true
-    - Alpha: 1
-      Class: rviz/Polygon
-      Color: 25; 255; 0
-      Enabled: true
-      Name: Footprint
-      Queue Size: 10
-      Topic: /move_base/global_costmap/footprint
-      Unreliable: false
       Value: true
     - Alpha: 1
       Axes Length: 1
@@ -303,6 +274,47 @@ Visualization Manager:
       Shape: Arrow
       Topic: /move_base/current_goal
       Unreliable: false
+      Value: true
+    - Alpha: 1
+      Class: rviz/Polygon
+      Color: 25; 255; 0
+      Enabled: true
+      Name: Footprint
+      Queue Size: 10
+      Topic: /move_base/global_costmap/footprint
+      Unreliable: false
+      Value: true
+    - Alpha: 1
+      Buffer Length: 1
+      Class: rviz/Path
+      Color: 25; 255; 0
+      Enabled: true
+      Head Diameter: 0.30000001192092896
+      Head Length: 0.20000000298023224
+      Length: 0.30000001192092896
+      Line Style: Lines
+      Line Width: 0.029999999329447746
+      Name: Global plan
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Pose Color: 255; 85; 255
+      Pose Style: None
+      Queue Size: 10
+      Radius: 0.029999999329447746
+      Shaft Diameter: 0.10000000149011612
+      Shaft Length: 0.10000000149011612
+      Topic: /move_base/DWAPlannerROS/global_plan
+      Unreliable: false
+      Value: true
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /local_planner_markers
+      Name: MarkerArray
+      Namespaces:
+        local_planner_markers: true
+      Queue Size: 100
       Value: true
   Enabled: true
   Global Options:
@@ -332,7 +344,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 6.2922892570495605
+      Distance: 10.239860534667969
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -340,17 +352,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 0.930495023727417
-        Y: -0.4991830289363861
-        Z: 0.29103535413742065
+        X: 1.8072682619094849
+        Y: -1.3350327014923096
+        Z: -0.20970898866653442
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.23539894819259644
-      Target Frame: trunk
-      Yaw: 5.600489139556885
+      Pitch: 1.5347962379455566
+      Target Frame: <Fixed Frame>
+      Yaw: 6.2804951667785645
     Saved: ~
 Window Geometry:
   Displays:

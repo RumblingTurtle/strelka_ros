@@ -30,7 +30,7 @@ void A1CheaterEstimator::setupZOffset() {
       transformRecieved = true;
     } catch (tf::TransformException &ex) {
       ROS_ERROR("%s", ex.what());
-      ros::Duration(0.1).sleep();
+      ros::Duration(0.5).sleep();
       continue;
     }
   }
@@ -138,6 +138,7 @@ int main(int argc, char **argv) {
   std_srvs::Empty resetObj;
   ros::service::call("/gazebo/reset_world", resetObj);
   ros::Duration(1.0).sleep();
+
   interface.moveToStand();
 
   A1CheaterEstimator estimator{};

@@ -8,6 +8,9 @@ ElevationAwareFootPlanner::ElevationAwareFootPlanner(
   assert(searchRadius > 0);
   mapSub = nh.subscribe("/elevation_mapping/elevation_map_raw", 1,
                         &ElevationAwareFootPlanner::setMap, this);
+  while (!firstMapRecieved) {
+    ros::spinOnce();
+  }
 }
 
 void ElevationAwareFootPlanner::setMap(const grid_map_msgs::GridMap &newMap) {
@@ -49,8 +52,8 @@ Vec3<float> ElevationAwareFootPlanner::adjustFoothold(
   Index nominalPosIndex;
   map.getIndex(nominalPositionCenter, nominalPosIndex);
 
-  if (!std::isnan(
-          evalFoothold(nominalPosIndex, nominalFootPositionWorld, legId))) {
+  if (!std::isnan(evalFoothold(nominalPosIndex, nominalFootPositionWorld, legId,
+                               robot))) {
     return nominalFootPositionWorld;
   }
 
@@ -59,7 +62,8 @@ Vec3<float> ElevationAwareFootPlanner::adjustFoothold(
   for (grid_map::SpiralIterator iterator(map, nominalPositionCenter,
                                          _searchRadius);
        !iterator.isPastEnd(); ++iterator) {
-    float score = evalFoothold(*iterator, nominalFootPositionWorld, legId);
+    float score =
+        evalFoothold(*iterator, nominalFootPositionWorld, legId, robot);
     if (std::isnan(score)) {
       continue;
     }
@@ -88,7 +92,7 @@ Vec3<float> ElevationAwareFootPlanner::adjustFoothold(
 
 float ElevationAwareFootPlanner::evalFoothold(
     const Index &index, const Vec3<float> &nominalPosition, int legId,
-    float maxCurvatureThreshold, float sdfThreshold,
+    robots::Robot &robot, float maxCurvatureThreshold, float sdfThreshold,
     float heightDifferenceThreshold, float maxDistToNominal) {
 
   bool positionAquired;
@@ -104,6 +108,11 @@ float ElevationAwareFootPlanner::evalFoothold(
     sdf = map.at("sdf", index);
     height = map.at("elevation_inpainted", index);
   } catch (const std::out_of_range &ex) {
+    return std::nanf("0");
+  }
+
+  Vec3<float> floatFoothold = footholdPosition.cast<float>();
+  if (!robot.worldFrameIKCheck(floatFoothold, legId)) {
     return std::nanf("0");
   }
 
@@ -124,8 +133,7 @@ float ElevationAwareFootPlanner::evalFoothold(
 
   float distScore = 1;
   if (positionAquired) {
-    float distToNominal =
-        (nominalPosition - footholdPosition.cast<float>()).norm();
+    float distToNominal = (nominalPosition - floatFoothold).norm();
 
     distScore = distToNominal > maxDistToNominal ? 1 : distToNominal;
   }

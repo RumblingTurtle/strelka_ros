@@ -34,7 +34,7 @@ public:
 
   float evalFoothold(const Eigen::Array2i &index,
                      const Vec3<float> &nominalPosition, int legId,
-                     float maxCurvatureThreshold = 0.9,
+                     robots::Robot &robot, float maxCurvatureThreshold = 0.9,
                      float sdfThreshold = 0.02,
                      float heightDifferenceThreshold = 0.12,
                      float maxDistToNominal = 0.3);
