@@ -21,11 +21,16 @@ public:
           plannerPtr) {
 
     using namespace strelka::control;
+    using namespace strelka;
+    using namespace strelka::robots;
+
     visualization_msgs::MarkerArray markers;
     markerId = 0;
     // Publish footholds
     LocalPlanner &planner = plannerPtr->getLocalPlanner();
     std::shared_ptr<FootholdPlanner> footPlanner = planner.getFootPlanner();
+    std::shared_ptr<GaitScheduler> scheduler = planner.getGaitScheduler();
+    UnitreeA1 &robot = plannerPtr->getRobotInstance();
 
     Vec12<float> mpcForces = planner.mpcForces() / 100;
     FOR_EACH_LEG {
@@ -38,6 +43,30 @@ public:
         markers.markers.push_back(
             createMarker(foothold, foothold, visualization_msgs::Marker::SPHERE,
                          Vec4<float>{1.0f, 0.0f, 0.0f, 1.0f}, 0.03f));
+
+        std::string footStateText;
+        switch (scheduler->currentLegState[LEG_ID]) {
+        case strelka::LegState::SWING:
+          footStateText = "SWING";
+          break;
+        case strelka::LegState::STANCE:
+          footStateText = "STANCE";
+          break;
+        case strelka::LegState::EARLY_CONTACT:
+          footStateText = "EARLY CONTACT";
+          break;
+        case strelka::LegState::LOST_CONTACT:
+          footStateText = "LOST CONTACT";
+          break;
+        }
+
+        Vec3<float> displayOffset{
+            0, (1 * (LEG_ID % 2) - 1 * ((LEG_ID + 1) % 2)) * 0.1, 0};
+        markers.markers.push_back(createMarker(
+            currentFootPos + robot.rotateBodyToWorldFrame(displayOffset) +
+                Vec3<float>{0, 0, 0.3f},
+            currentFootPos, visualization_msgs::Marker::TEXT_VIEW_FACING,
+            Vec4<float>{1.0f, 1.0f, 1.0f, 1.0f}, 0.04f, footStateText));
 
         if (planner.footState(LEG_ID)) {
           markers.markers.push_back(
@@ -68,7 +97,8 @@ public:
 
   visualization_msgs::Marker createMarker(Vec3<float> pStart, Vec3<float> pEnd,
                                           uint32_t shape, Vec4<float> color,
-                                          float scale) {
+                                          float scale,
+                                          std::string markerText = " ") {
     visualization_msgs::Marker marker;
     marker.header.frame_id = "odom";
     marker.header.stamp = ros::Time::now();
@@ -97,6 +127,10 @@ public:
       marker.pose.orientation.y = 0.0;
       marker.pose.orientation.z = 0.0;
       marker.pose.orientation.w = 1.0;
+    }
+
+    if (shape == visualization_msgs::Marker::TEXT_VIEW_FACING) {
+      marker.text = markerText;
     }
 
     marker.scale.x = scale;
