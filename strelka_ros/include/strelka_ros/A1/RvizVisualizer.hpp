@@ -34,46 +34,50 @@ public:
 
     Vec12<float> mpcForces = planner.mpcForces() / 100;
     FOR_EACH_LEG {
-      int footholdCount = footPlanner->footholdCount(LEG_ID);
-      for (int fID = 0; fID < footholdCount; fID++) {
-        Vec3<float> foothold = footPlanner->getFoothold(LEG_ID, fID);
-        Vec3<float> mpcForce = mpcForces.block<3, 1>(LEG_ID * 3, 0);
-        Vec3<float> currentFootPos = footPlanner->currentFootPosition(LEG_ID);
+      Vec3<float> currentFootPos = footPlanner->currentFootPosition(LEG_ID);
+      std::string footStateText;
+      switch (scheduler->currentLegState[LEG_ID]) {
+      case strelka::LegState::SWING:
+        footStateText = "SWING";
+        break;
+      case strelka::LegState::STANCE:
+        footStateText = "STANCE";
+        break;
+      case strelka::LegState::EARLY_CONTACT:
+        footStateText = "EARLY CONTACT";
+        break;
+      case strelka::LegState::LOST_CONTACT:
+        footStateText = "LOST CONTACT";
+        break;
+      }
 
-        markers.markers.push_back(
-            createMarker(foothold, foothold, visualization_msgs::Marker::SPHERE,
-                         Vec4<float>{1.0f, 0.0f, 0.0f, 1.0f}, 0.03f));
-
-        std::string footStateText;
-        switch (scheduler->currentLegState[LEG_ID]) {
-        case strelka::LegState::SWING:
-          footStateText = "SWING";
-          break;
-        case strelka::LegState::STANCE:
-          footStateText = "STANCE";
-          break;
-        case strelka::LegState::EARLY_CONTACT:
-          footStateText = "EARLY CONTACT";
-          break;
-        case strelka::LegState::LOST_CONTACT:
-          footStateText = "LOST CONTACT";
-          break;
-        }
-
-        Vec3<float> displayOffset{
-            0, (1 * (LEG_ID % 2) - 1 * ((LEG_ID + 1) % 2)) * 0.1, 0};
+      Vec3<float> displayOffset{
+          0, (1 * (LEG_ID % 2) - 1 * ((LEG_ID + 1) % 2)) * 0.1, 0};
+      if (robot.hasStateEstimates()) {
         markers.markers.push_back(createMarker(
             currentFootPos + robot.rotateBodyToWorldFrame(displayOffset) +
                 Vec3<float>{0, 0, 0.3f},
             currentFootPos, visualization_msgs::Marker::TEXT_VIEW_FACING,
             Vec4<float>{1.0f, 1.0f, 1.0f, 1.0f}, 0.04f, footStateText));
+      }
 
-        if (planner.footState(LEG_ID)) {
-          markers.markers.push_back(
-              createMarker(currentFootPos, currentFootPos + mpcForce,
-                           visualization_msgs::Marker::ARROW,
-                           Vec4<float>{0.0f, 1.0f, 0.0f, 0.1f}, 0.02f));
-        }
+      // Draw current foot position and MPC force
+      Vec3<float> mpcForce = mpcForces.block<3, 1>(LEG_ID * 3, 0);
+      if (planner.footState(LEG_ID)) {
+        markers.markers.push_back(
+            createMarker(currentFootPos, currentFootPos + mpcForce,
+                         visualization_msgs::Marker::ARROW,
+                         Vec4<float>{0.0f, 1.0f, 0.0f, 0.1f}, 0.02f));
+      }
+
+      int footholdCount = footPlanner->footholdCount(LEG_ID);
+      // Draw all footholds and their trajectories
+      for (int fID = 0; fID < footholdCount; fID++) {
+        Vec3<float> foothold = footPlanner->getFoothold(LEG_ID, fID);
+
+        markers.markers.push_back(
+            createMarker(foothold, foothold, visualization_msgs::Marker::SPHERE,
+                         Vec4<float>{1.0f, 0.0f, 0.0f, 1.0f}, 0.03f));
 
         if (fID < footholdCount - 1) {
           // Sample desired trajectory
@@ -87,7 +91,7 @@ public:
             markers.markers.push_back(
                 createMarker(trajectoryPoint, trajectoryPoint,
                              visualization_msgs::Marker::SPHERE,
-                             Vec4<float>{0.0f, 0.0f, 0.0f, 0.8f}, 0.01f));
+                             Vec4<float>{0.0f, 0.0f, 0.0f, 0.5f}, 0.01f));
           }
         }
       }
