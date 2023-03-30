@@ -11,6 +11,8 @@ if (LCM_FOUND)
     include_directories(${LCM_INCLUDE_DIRS})
 endif (LCM_FOUND)
 
+find_package(strelka REQUIRED)
+
 find_package(catkin REQUIRED COMPONENTS
     controller_manager
     genmsg
@@ -43,13 +45,14 @@ catkin_package(
 include_directories(
   ./include
   ${catkin_INCLUDE_DIRS}
+  ${strelka_INCLUDE_DIRS}
 )
 
 add_executable(a1_transform_publisher src/TransformPublisher.cpp)
 
 target_link_libraries( a1_transform_publisher
 ${catkin_LIBRARIES}
-strelka
+${strelka_LIBRARIES}
 lcm
 )
 
@@ -57,7 +60,7 @@ add_executable(a1_bridge src/A1/A1Bridge.cpp)
 
 target_link_libraries( a1_bridge
 ${catkin_LIBRARIES}
-strelka
+${strelka_LIBRARIES}
 lcm
 )
 
@@ -65,7 +68,7 @@ add_executable(a1_local_planner src/A1/LocalPlanner.cpp src/ElevationAwareFootPl
 
 target_link_libraries(a1_local_planner
 ${catkin_LIBRARIES}
-strelka
+${strelka_LIBRARIES}
 lcm
 )
 
@@ -73,7 +76,7 @@ add_executable(a1_state_estimator src/A1/StateEstimator.cpp)
 
 target_link_libraries(a1_state_estimator
 ${catkin_LIBRARIES}
-strelka
+${strelka_LIBRARIES}
 lcm
 )
 
@@ -81,7 +84,7 @@ add_executable(a1_wbic src/A1/WBIC.cpp)
 
 target_link_libraries(a1_wbic
 ${catkin_LIBRARIES}
-strelka
+${strelka_LIBRARIES}
 lcm
 )
 
@@ -89,7 +92,7 @@ add_executable(a1_high_command_publisher src/A1/HighLevelCommandPublisher.cpp)
 
 target_link_libraries(a1_high_command_publisher 
 ${catkin_LIBRARIES}
-strelka
+${strelka_LIBRARIES}
 lcm
 )
 
@@ -97,7 +100,7 @@ add_executable(a1_cheater_state_estimator src/A1/A1CheaterEstimator.cpp)
 
 target_link_libraries(a1_cheater_state_estimator 
 ${catkin_LIBRARIES}
-strelka
+${strelka_LIBRARIES}
 lcm
 )
 
