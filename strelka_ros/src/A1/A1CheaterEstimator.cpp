@@ -10,7 +10,7 @@ A1CheaterEstimator::A1CheaterEstimator()
   robotStateMsg = new strelka_lcm_headers::RobotState();
   robotGazeboMsg = new strelka_lcm_headers::RobotGazeboState();
   zeroOffset = Vec3<float>::Zero();
-  subGazebo = lcm.subscribe(strelka::constants::GAZEBO_STATE_TOPIC_NAME,
+  subGazebo = lcm.subscribe(GAZEBO_STATE_TOPIC_NAME,
                             &A1CheaterEstimator::updateGazebo, this);
   subRawState = lcm.subscribe(strelka::constants::RAW_STATE_TOPIC_NAME,
                               &A1CheaterEstimator::update, this);

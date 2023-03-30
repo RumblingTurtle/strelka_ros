@@ -14,6 +14,7 @@
 
 class A1CheaterEstimator {
   lcm::LCM lcm;
+  const char *const GAZEBO_STATE_TOPIC_NAME = "gazebo_state";
   strelka_lcm_headers::RobotState *robotStateMsg;
   strelka_lcm_headers::RobotGazeboState *robotGazeboMsg;
 

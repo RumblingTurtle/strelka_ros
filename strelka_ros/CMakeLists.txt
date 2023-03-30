@@ -1,8 +1,11 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(strelka_ros)
 
-## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+message(STATUS "Generating header files strelka_messages package")
+
+add_custom_target(generate_lcm_headers ALL
+COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate_msg_headers.sh -a
+                  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ )
 
 SET(CMAKE_MODULE_PATH ${${PROJECT_NAME}_SOURCE_DIR}/cmake)
 
