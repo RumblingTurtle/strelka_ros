@@ -1,15 +1,17 @@
 
 
 <launch>
-    <rosparam file="$(find strelka_ros)/config/pipeline_params.yaml" />
-
+    <arg name="load_params" default="true"/>
     <arg name="pipeline_params_file" value="$(find strelka_ros)/config/pipeline_params.yaml"/>
     <arg name="move_base_map" default="blank"/>
     <arg name="elevation_start_delay" default="3"/>
-
     <arg name="blind" value="$(eval 'blind:true' in open(arg('pipeline_params_file'), 'r').read().replace(' ','').lower())"/>
     <arg name="use_move_base" value="$(eval 'use_move_base:true' in open(arg('pipeline_params_file'), 'r').read().replace(' ','').lower())"/>
     <arg name="perfect_odometry" value="$(eval 'perfect_odometry:true' in open(arg('pipeline_params_file'), 'r').read().replace(' ','').lower())"/>
+    
+    <group if="$(arg load_params)">
+        <rosparam file="$(arg pipeline_params_file)" />
+    </group>
 
     <node name="a1_state_estimator" pkg="strelka_ros" type="a1_state_estimator" output="screen"/>
     <node name="a1_wbic" pkg="strelka_ros" type="a1_wbic" output="screen"/>

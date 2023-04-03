@@ -20,10 +20,14 @@ public:
   bool firstMapRecieved;
   ros::Subscriber mapSub;
 
+  float maxCurvatureThreshold;
+  float sdfThreshold;
+  float heightDifferenceThreshold;
+  float maxDistToNominal;
+
   void setMap(const grid_map_msgs::GridMap &newMap);
 
   ElevationAwareFootPlanner(std::shared_ptr<GaitScheduler> scheduler,
-                            float searchRadius,
                             bool updateFootholdsContinuously,
                             ros::NodeHandle &nh);
 
@@ -34,8 +38,5 @@ public:
 
   float evalFoothold(const Eigen::Array2i &index,
                      const Vec3<float> &nominalPosition, int legId,
-                     robots::Robot &robot, float maxCurvatureThreshold = 0.9,
-                     float sdfThreshold = 0.02,
-                     float heightDifferenceThreshold = 0.12,
-                     float maxDistToNominal = 0.3);
+                     robots::Robot &robot);
 };

@@ -1,13 +1,21 @@
 #include <strelka_ros/ElevationAwareFootPlanner.hpp>
 
 ElevationAwareFootPlanner::ElevationAwareFootPlanner(
-    std::shared_ptr<GaitScheduler> scheduler, float searchRadius,
-    bool updateFootholdsContinuously, ros::NodeHandle &nh)
+    std::shared_ptr<GaitScheduler> scheduler, bool updateFootholdsContinuously,
+    ros::NodeHandle &nh)
     : FootholdPlanner(scheduler, updateFootholdsContinuously),
-      _searchRadius(searchRadius), firstMapRecieved(false) {
+      firstMapRecieved(false) {
   assert(searchRadius > 0);
   mapSub = nh.subscribe("/elevation_mapping/elevation_map_raw", 1,
                         &ElevationAwareFootPlanner::setMap, this);
+
+  nh.param<float>("/foot_planning/foothold_search_radius", _searchRadius, 0.1);
+  nh.param<float>("/foot_planning/max_curvature_threshold",
+                  maxCurvatureThreshold, 0.9);
+  nh.param<float>("/foot_planning/sdf_threshold", sdfThreshold, 0.02);
+  nh.param<float>("/foot_planning/height_difference_threshold",
+                  heightDifferenceThreshold, 0.12);
+  nh.param<float>("/foot_planning/max_dist_to_nominal", maxDistToNominal, 0.3);
   while (!firstMapRecieved) {
     ros::spinOnce();
   }
@@ -92,8 +100,7 @@ Vec3<float> ElevationAwareFootPlanner::adjustFoothold(
 
 float ElevationAwareFootPlanner::evalFoothold(
     const Index &index, const Vec3<float> &nominalPosition, int legId,
-    robots::Robot &robot, float maxCurvatureThreshold, float sdfThreshold,
-    float heightDifferenceThreshold, float maxDistToNominal) {
+    robots::Robot &robot) {
 
   bool positionAquired;
   float curvature;

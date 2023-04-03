@@ -1,23 +1,18 @@
 common:
   gait: trot
   # Use local planner with or without elevation_mapping
-  blind: true
+  blind: false
   # Use cheater odometry from simulation
   perfect_odometry: true
   sim_slowdown: 1.0
 
 high_command:
   use_move_base: false
-  velocity_x: 0.2
+  velocity_x: 0.15
   velocity_y: 0.0
   velocity_yaw: 0.0
   foot_height: 0.08 
   body_height: 0.27 
-
-foot_planning:
-  foothold_search_radius: 0.1
-  # Update footholds during the whole swing phase
-  upd_footholds_continuously: false
 
 mpc:
   mpc_step_dt: 0.02
@@ -31,3 +26,12 @@ body_planner:
   # Sparse stepping stones
   # height_lpf_freq: 0.9
   # pitch_lpf_freq: 0.9
+
+foot_planning:
+  foothold_search_radius: 0.1
+  # Update footholds during the whole swing phase
+  upd_footholds_continuously: false
+  max_curvature_threshold: 0.9
+  sdf_threshold: 0.02
+  height_difference_threshold: 0.12
+  max_dist_to_nominal: 0.3

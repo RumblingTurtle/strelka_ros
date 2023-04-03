@@ -41,7 +41,6 @@ int main(int argc, char **argv) {
 
   nh.param<bool>("/foot_planning/upd_footholds_continuously", contFootUpdate,
                  false);
-  nh.param<float>("/foot_planning/foothold_search_radius", searchRadius, 0.1);
 
   nh.param<float>("/mpc/mpc_step_dt", stepDt, 0.02);
   nh.param<int>("/mpc/mpc_horizon_steps", horizonSteps, 15);
@@ -63,7 +62,7 @@ int main(int argc, char **argv) {
         std::make_shared<GaitScheduler>(strelka::GAITS_MAP.at(gaitName));
 
     std::shared_ptr<ElevationAwareFootPlanner> footPlanner =
-        std::make_shared<ElevationAwareFootPlanner>(gaitScheduler, searchRadius,
+        std::make_shared<ElevationAwareFootPlanner>(gaitScheduler,
                                                     contFootUpdate, nh);
 
     planner = std::make_shared<LocalPlannerNode<UnitreeA1>>(
