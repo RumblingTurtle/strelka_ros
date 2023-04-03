@@ -1,3 +1,0 @@
-<launch>
-    <node name="a1_bridge" pkg="strelka_ros" type="a1_bridge" output="screen"/>
-</launch>

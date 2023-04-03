@@ -1,5 +1,5 @@
-#ifndef A1_CHEATER_STATE_ESITMATOR_H
-#define A1_CHEATER_STATE_ESITMATOR_H
+#ifndef CHEATER_STATE_ESITMATOR_H
+#define CHEATER_STATE_ESITMATOR_H
 
 #include <iostream>
 #include <lcm/lcm-cpp.hpp>
@@ -41,4 +41,4 @@ public:
   ~A1CheaterEstimator();
 };
 
-#endif // A1_CHEATER_STATE_ESITMATOR_H
+#endif // CHEATER_STATE_ESITMATOR_H

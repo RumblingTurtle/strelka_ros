@@ -28,7 +28,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: PointCloud2
+    SyncSource: ""
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -313,7 +313,7 @@ Visualization Manager:
       Marker Topic: /local_planner_markers
       Name: MarkerArray
       Namespaces:
-        local_planner_markers: true
+        {}
       Queue Size: 100
       Value: true
   Enabled: true
@@ -344,7 +344,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 10.239860534667969
+      Distance: 4.184781074523926
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -352,17 +352,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 1.8072682619094849
-        Y: -1.3350327014923096
-        Z: -0.20970898866653442
+        X: 1.3763329982757568
+        Y: -0.21019284427165985
+        Z: 0.2907671332359314
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.5347962379455566
+      Pitch: 0.509797215461731
       Target Frame: <Fixed Frame>
-      Yaw: 6.2804951667785645
+      Yaw: 5.360484600067139
     Saved: ~
 Window Geometry:
   Displays:

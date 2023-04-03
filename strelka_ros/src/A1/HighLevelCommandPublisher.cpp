@@ -50,13 +50,12 @@ int main(int argc, char **argv) {
 
   bool useMoveBase;
   float footHeight, bodyHeight, velocityX, velocityY, velocityYaw;
-  nh.param("velocity_x", velocityX, 0.0f);
-  nh.param("velocity_y", velocityY, 0.0f);
-  nh.param("velocity_yaw", velocityYaw, 0.0f);
-  nh.param("foot_height", footHeight, 0.08f);
-  nh.param("body_height", bodyHeight, 0.26f);
-
-  nh.param("use_move_base", useMoveBase, false);
+  nh.param("/high_command/velocity_x", velocityX, 0.0f);
+  nh.param("/high_command/velocity_y", velocityY, 0.0f);
+  nh.param("/high_command/velocity_yaw", velocityYaw, 0.0f);
+  nh.param("/high_command/foot_height", footHeight, 0.08f);
+  nh.param("/high_command/body_height", bodyHeight, 0.26f);
+  nh.param("/high_command/use_move_base", useMoveBase, false);
 
   strelka_lcm_headers::HighLevelCommand highCommandMsg{
       .linearSpeed = {velocityX, velocityY, 0.0},

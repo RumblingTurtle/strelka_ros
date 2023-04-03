@@ -1,5 +1,7 @@
 #include <strelka/nodes/MoveToInterface.hpp>
 #include <strelka/nodes/StateEstimatorNode.hpp>
+#include <strelka_ros/A1/CheaterEstimator.hpp>
+#include <strelka_ros/SimSlowdown.hpp>
 
 #include <ros/ros.h>
 #include <std_srvs/Empty.h>
@@ -20,9 +22,26 @@ int main(int argc, char **argv) {
 
   interface.moveToStand();
 
-  StateEstimatorNode<UnitreeA1> estimator{};
-  while (estimator.handle() && ros::ok()) {
+  float sim_slowdown;
+  bool perfect_odometry;
+
+  nh.param<bool>("/common/perfect_odometry", perfect_odometry, false);
+  nh.param<float>("/common/sim_slowdown", sim_slowdown, 1.0f);
+
+  slowdownGazebo(sim_slowdown);
+
+  if (perfect_odometry) {
+    A1CheaterEstimator estimator{};
+    while (estimator.handle() && ros::ok()) {
+    }
+
+  } else {
+    StateEstimatorNode<UnitreeA1> estimator{};
+    while (estimator.handle() && ros::ok()) {
+    }
   }
+
+  slowdownGazebo(1.0f);
 
   interface.moveToInit();
   return 0;

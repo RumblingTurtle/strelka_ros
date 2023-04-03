@@ -1,33 +1,36 @@
 
 
 <launch>
-    <rosparam file="$(find strelka_ros)/config/a1_full_pipeline.yaml" />
+    <rosparam file="$(find strelka_ros)/config/pipeline_params.yaml" />
 
-    <arg name="full_yaml_file" value="$(find strelka_ros)/config/a1_full_pipeline.yaml"/>
+    <arg name="pipeline_params_file" value="$(find strelka_ros)/config/pipeline_params.yaml"/>
     <arg name="move_base_map" default="blank"/>
-
-    <arg name="blind" value="$(eval 'blind:true' in open(arg('full_yaml_file'), 'r').read().replace(' ','').lower())"/>
-    <arg name="perfect_odometry" value="$(eval 'perfect_odometry:true' in open(arg('full_yaml_file'), 'r').read().replace(' ','').lower())"/>
     <arg name="elevation_start_delay" default="3"/>
 
-    <include file="$(find strelka_ros)/launch/a1_wbic_observer.launch">
-        <arg name="perfect_odometry" value="$(arg perfect_odometry)"/>
-    </include>
-    
-    <include file="$(find strelka_ros)/launch/a1_local_planner.launch">
-        <arg name="blind" value="$(arg blind)"/>
-        <arg name="elevation_start_delay" value="$(arg elevation_start_delay)"/>
-    </include>
-    
-    <include file="$(find strelka_ros)/launch/a1_high_command_publisher.launch"/>
+    <arg name="blind" value="$(eval 'blind:true' in open(arg('pipeline_params_file'), 'r').read().replace(' ','').lower())"/>
+    <arg name="use_move_base" value="$(eval 'use_move_base:true' in open(arg('pipeline_params_file'), 'r').read().replace(' ','').lower())"/>
+    <arg name="perfect_odometry" value="$(eval 'perfect_odometry:true' in open(arg('pipeline_params_file'), 'r').read().replace(' ','').lower())"/>
 
-    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find strelka_ros)/rviz/a1.rviz" />
+    <node name="a1_state_estimator" pkg="strelka_ros" type="a1_state_estimator" output="screen"/>
+    <node name="a1_wbic" pkg="strelka_ros" type="a1_wbic" output="screen"/>
+    <node name="a1_local_planner" pkg="strelka_ros" type="a1_local_planner" output="screen"/>
+    <node name="a1_transform_publisher" pkg="strelka_ros" type="a1_transform_publisher" output="screen"/>
+    <node name="map_to_odom" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /map /odom 100"/> 
+    
+    <group unless="$(arg blind)">
+        <include file="$(find strelka_elevation)/launch/a1.launch">
+            <arg name="map_type" value="steps"/>
+            <arg name="elevation_start_delay" value="$(arg elevation_start_delay)"/>
+        </include>
+    </group>
 
-    <group if="$(eval 'use_move_base:true' in open(arg('full_yaml_file'), 'r').read().replace(' ','').lower())">
-        <include file="$(find strelka_ros)/launch/move_base.launch">
+    <group if="$(arg use_move_base)">
+        <include file="$(find strelka_ros)/launch/a1_move_base.launch">
                 <arg name="map_name" value="$(arg move_base_map)"/>
         </include>
     </group>
 
-    <node pkg="tf" type="static_transform_publisher" name="map_to_odom" args="0 0 0 0 0 0 /map /odom 100"/> 
+    <node name="a1_high_command_publisher" pkg="strelka_ros" type="a1_high_command_publisher" output="screen"/>
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find strelka_ros)/rviz/a1.rviz" />
+
 </launch>

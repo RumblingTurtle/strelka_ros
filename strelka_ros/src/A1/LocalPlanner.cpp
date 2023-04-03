@@ -36,16 +36,18 @@ int main(int argc, char **argv) {
   int horizonSteps;
   bool blind, contFootUpdate;
 
-  nh.param<std::string>("gait", gaitName, "trot");
-  nh.param<bool>("blind", blind, true);
-  nh.param<bool>("upd_footholds_continuously", contFootUpdate, false);
-  nh.param<float>("foothold_search_radius", searchRadius, 0.1);
+  nh.param<std::string>("/common/gait", gaitName, "trot");
+  nh.param<bool>("/common/blind", blind, true);
 
-  nh.param<float>("mpc_step_dt", stepDt, 0.02);
-  nh.param<int>("mpc_horizon_steps", horizonSteps, 15);
+  nh.param<bool>("/foot_planning/upd_footholds_continuously", contFootUpdate,
+                 false);
+  nh.param<float>("/foot_planning/foothold_search_radius", searchRadius, 0.1);
 
-  nh.param<float>("height_lpf_freq", heightFreq, 30.0);
-  nh.param<float>("pitch_lpf_freq", pitchFreq, 10.0);
+  nh.param<float>("/mpc/mpc_step_dt", stepDt, 0.02);
+  nh.param<int>("/mpc/mpc_horizon_steps", horizonSteps, 15);
+
+  nh.param<float>("/body_planner/height_lpf_freq", heightFreq, 30.0);
+  nh.param<float>("/body_planner/pitch_lpf_freq", pitchFreq, 10.0);
 
   if (strelka::GAITS_MAP.count(gaitName) == 0) {
     ROS_ERROR_STREAM("LocalPlannerNode: Can't find gait named " << gaitName);

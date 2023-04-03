@@ -1,4 +1,4 @@
-#include <strelka_ros/A1/A1CheaterEstimator.hpp>
+#include <strelka_ros/A1/CheaterEstimator.hpp>
 
 #include <ros/ros.h>
 #include <std_srvs/Empty.h>
@@ -124,27 +124,4 @@ void A1CheaterEstimator::update(
          sizeof(float) * 36);
 
   lcm.publish(strelka::constants::ROBOT_STATE_TOPIC_NAME, robotStateMsg);
-}
-
-int main(int argc, char **argv) {
-  ros::init(argc, argv, "a1_state_estimator");
-  ros::NodeHandle nh;
-  using namespace strelka::interfaces;
-  using namespace strelka::robots;
-
-  MoveToInterface<UnitreeA1> interface {};
-  interface.moveToInit();
-
-  std_srvs::Empty resetObj;
-  ros::service::call("/gazebo/reset_world", resetObj);
-  ros::Duration(1.0).sleep();
-
-  interface.moveToStand();
-
-  A1CheaterEstimator estimator{};
-  while (estimator.handle() && ros::ok()) {
-  }
-
-  interface.moveToInit();
-  return 0;
 }

@@ -1,5 +1,0 @@
-<launch>
-    <rosparam file="$(find strelka_ros)/config/a1_full_pipeline.yaml" />
-    
-    <node name="a1_high_command_publisher" pkg="strelka_ros" type="a1_high_command_publisher" output="screen"/>
-</launch>

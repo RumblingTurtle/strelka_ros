@@ -75,7 +75,7 @@ ${strelka_LIBRARIES}
 lcm
 )
 
-add_executable(a1_state_estimator src/A1/StateEstimator.cpp)
+add_executable(a1_state_estimator src/A1/StateEstimator.cpp src/A1/CheaterEstimator.cpp)
 
 target_link_libraries(a1_state_estimator
 ${catkin_LIBRARIES}
@@ -98,12 +98,3 @@ ${catkin_LIBRARIES}
 ${strelka_LIBRARIES}
 lcm
 )
-
-add_executable(a1_cheater_state_estimator src/A1/A1CheaterEstimator.cpp)
-
-target_link_libraries(a1_cheater_state_estimator 
-${catkin_LIBRARIES}
-${strelka_LIBRARIES}
-lcm
-)
-

@@ -58,6 +58,6 @@
         <remap from="/joint_states" to="/a1_gazebo/joint_states"/>
     </node>
     
-    <include file="$(find strelka_ros)/launch/a1_lcm_to_ros_bridge.launch"/>
+    <node name="a1_bridge" pkg="strelka_ros" type="a1_bridge" output="screen"/>
 
 </launch>

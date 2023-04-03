@@ -31,27 +31,10 @@ catkin build -DCMAKE_BUILD_TYPE=Release
 ```
 roslaunch strelka_ros a1_simulation.launch.launch lidar:=[true|false] lidar_pitch:=0.8 wname:=[empty|stairs|bumpy_terrain ...]
 ```
-### Run everything in one go ...
+
+### [Edit control parameters using yaml config](config/a1_full_pipeline.yaml)
+
+### Run the pipeline
 ```
 roslaunch strelka_ros a1_full_pipeline.launch
 ```
-### ... Or
-### 1. Run low level control and state estimation
-```
-# Start WBIC and state estimation node together
-roslaunch strelka_ros a1_wbic_observer.launch perfect_odometry:=true/false
-
-# Or separately
-roslaunch strelka_ros a1_state_estimator.launch perfect_odometry:=true/false
-roslaunch strelka_ros a1_wbic.launch
-```
-### 2. Start local planner node
-```
-roslaunch strelka_ros a1_local_planner.launch blind:=true/false
-```
-### 3. Publish high level command
-```
-roslaunch strelka_ros a1_high_command_publisher.launch
-```
-
-## [Edit control parameters using yaml config](config/a1_full_pipeline.yaml)

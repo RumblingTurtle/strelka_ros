@@ -1,9 +1,0 @@
-<launch>
-    <arg name="perfect_odometry" default="true"/>
-
-    <include file="$(find strelka_ros)/launch/a1_state_estimator.launch">
-        <arg name="perfect_odometry" value="$(arg perfect_odometry)"/>
-    </include>
-
-    <include file="$(find strelka_ros)/launch/a1_wbic.launch" />
-</launch>
