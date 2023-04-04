@@ -13,6 +13,8 @@ int main(int argc, char **argv) {
   using namespace strelka::state_estimation;
   using namespace strelka::robots;
 
+  slowdownGazebo(1.0);
+
   MoveToInterface<UnitreeA1> interface {};
   interface.moveToInit();
 
