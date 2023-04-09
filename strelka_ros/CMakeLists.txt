@@ -3,7 +3,7 @@ project(strelka_ros)
 
 message(STATUS "Generating header files strelka_messages package")
 
-add_custom_target(generate_lcm_headers ALL
+execute_process(
 COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/generate_msg_headers.sh -a
                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ )
 
