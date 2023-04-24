@@ -24,6 +24,9 @@ public:
   float sdfThreshold;
   float heightDifferenceThreshold;
   float maxDistToNominal;
+  float minDistToOtherFeet;
+  float minSupportTriangleArea;
+  bool testComInsideSupportPolygon;
 
   void setMap(const grid_map_msgs::GridMap &newMap);
 

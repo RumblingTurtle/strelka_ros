@@ -8,7 +8,7 @@ common:
 
 high_command:
   use_move_base: false
-  velocity_x: 0.15
+  velocity_x: 0.2
   velocity_y: 0.0
   velocity_yaw: 0.0
   foot_height: 0.08 
@@ -35,3 +35,6 @@ foot_planning:
   sdf_threshold: 0.02
   height_difference_threshold: 0.12
   max_dist_to_nominal: 0.3
+  min_dist_to_other_feet: 0.1
+  min_support_triangle_area: 0.1
+  test_com_inside_support_polygon: true
